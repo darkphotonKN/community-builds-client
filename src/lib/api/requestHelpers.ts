@@ -113,7 +113,7 @@ function handleAxiosError<T>(err: unknown): ErrorResponse<T> {
   if (axios.isAxiosError(err)) {
     return {
       __type: "Error",
-      statusCode: err?.response?.data?.status || 400,
+      statusCode: err?.response?.data?.statusCode || 400,
       message: err?.response?.data?.message || err.message,
       result: err?.response?.data?.result || null,
     };

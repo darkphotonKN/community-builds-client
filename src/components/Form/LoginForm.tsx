@@ -4,8 +4,8 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import Button from "../Button";
-import { SignInResponse } from "@/type/member.types";
 import { ApiResponse, ErrorResponse } from "@/type/api";
+import { SignInResponse } from "@/type/member.types";
 
 type Values = {
   password: string;
@@ -32,11 +32,13 @@ function LoginForm() {
     }
   }, [res]);
 
-  const renderResults = (res: ApiResponse<SignInResponse>) => {
+  const renderResults = (
+    res: ApiResponse<SignInResponse> | null | undefined,
+  ) => {
     /* handle error case first for narrowing */
     if (isErrorResponse(res)) {
       if (res.statusCode === 401) {
-        return <div className="text-red-600">Credentials were incorrect.</div>;
+        return <div className="text-red-600">{res.message}</div>;
       } else if (res.statusCode === 500 || res.statusCode === 400) {
         return (
           <div className="text-red-600">
