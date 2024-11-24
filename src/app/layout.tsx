@@ -30,11 +30,10 @@ export default function RootLayout({
           {/* <Modal /> */}
 
           {/* Nav Area  */}
-
           <Nav />
 
           {/* Content Area */}
-          <div className="w-[100%] h-screen">
+          <div className="w-[100%] h-screen pt-4">
             <Header />
             <div>{children}</div>
           </div>

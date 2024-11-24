@@ -4,17 +4,13 @@ import { useState } from "react";
 import * as Yup from "yup";
 import Button from "../Button";
 import { ApiResponse, ErrorResponse } from "@/type/api";
+import HeaderTwo from "../Layout/Text/HeaderTwo";
 import { SignInResponse } from "@/type/member.types";
 
 type Values = {
   name: string;
   password: string;
   email: string;
-};
-
-type SignupRes = {
-  data: string;
-  status: number;
 };
 
 function SignupForm() {
@@ -46,7 +42,7 @@ function SignupForm() {
         values: Values,
         { setSubmitting }: FormikHelpers<Values>,
       ) => {
-        const res = await postRequest<SignInResponse>("/user/signup", values);
+        const res = await postRequest<SignInResponse>("/member/signup", values);
         console.log("res:", res);
 
         if (isErrorResponse(res)) {
@@ -60,9 +56,9 @@ function SignupForm() {
     >
       {({ errors, touched }) => (
         <Form className="flex flex-col justify-center">
-          <div className="text-gray-700 text-lg font-semibold">Sign Up</div>
+          <HeaderTwo>Register</HeaderTwo>
           <label htmlFor="name" className="mt-8 mb-2">
-            First Name
+            Full Name
           </label>
           <Field
             className="border border-black px-2 py-1 rounded"
@@ -107,7 +103,7 @@ function SignupForm() {
 
           {/* Sign Up Results */}
           <div className="mt-3">
-            {res?.result && res?.statusCode === 201 ? (
+            {res?.statusCode === 201 ? (
               <div className="text-green-600">
                 Your account has been successfully created. Please check your
                 email.

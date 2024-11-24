@@ -11,7 +11,7 @@ export const navData: NavData = [
     link: "/",
   },
   {
-    name: "Create",
+    name: "Tutorial",
     link: "/builds/create",
   },
   {
@@ -19,11 +19,24 @@ export const navData: NavData = [
     link: "/builds",
   },
   {
+    name: "Example",
+    link: "/example",
+  },
+];
+
+export const cornerNavData: NavData = [
+  {
+    name: "Create Build",
+    link: "/builds/create",
+  },
+
+  {
+    name: "Register",
+    link: "/signup",
+  },
+
+  {
     name: "Login",
     link: "/login",
-  },
-  {
-    name: "Signup",
-    link: "/signup",
   },
 ];
