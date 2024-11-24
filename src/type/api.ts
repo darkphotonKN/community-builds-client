@@ -6,8 +6,12 @@
 
 // Response Helper Type - All API responses follow this same format
 
-export type ApiResponse<T> = {
-	status: number;
-	message: string;
-	data: T;
+export type ApiResponse<DataT> = {
+  statusCode: number;
+  message: string;
+  result: DataT;
+};
+
+export type ErrorResponse<DataT> = ApiResponse<DataT> & {
+  __type: "Error";
 };

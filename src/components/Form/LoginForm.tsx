@@ -1,29 +1,19 @@
 "use client";
-import {
-  ErrorResponse,
-  isErrorResponse,
-  postRequest,
-} from "@/lib/api/requestHelpers";
-import { AxiosResponse } from "axios";
+import { isErrorResponse, postRequest } from "@/lib/api/requestHelpers";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import Button from "../Button";
+import { SignInResponse } from "@/type/member.types";
+import { ApiResponse, ErrorResponse } from "@/type/api";
 
 type Values = {
   password: string;
   email: string;
 };
 
-type SignupSuccRes = {
-  data: string;
-  status: number;
-};
-
-type SignupRes = SignupSuccRes | AxiosResponse<any, any> | ErrorResponse | null;
-
 function LoginForm() {
-  const [res, setRes] = useState<SignupRes>();
+  const [res, setRes] = useState<ApiResponse<SignInResponse> | null>();
 
   const SignupSchema = Yup.object().shape({
     email: Yup.string()
@@ -35,21 +25,19 @@ function LoginForm() {
   });
 
   useEffect(() => {
-    if (res?.status === 200) {
+    if (res?.statusCode === 200) {
       // store access token then re-direct
       if (isErrorResponse(res)) return;
-      localStorage.setItem("access", res?.data.access_token);
+      localStorage.setItem("access", "TODO");
     }
   }, [res]);
 
-  const renderResults = (res: SignupRes) => {
-    console.log("Error:", res);
-
+  const renderResults = (res: ApiResponse<SignInResponse>) => {
     /* handle error case first for narrowing */
     if (isErrorResponse(res)) {
-      if (res.status === 401) {
+      if (res.statusCode === 401) {
         return <div className="text-red-600">Credentials were incorrect.</div>;
-      } else if (res.status === 500 || res.status === 400) {
+      } else if (res.statusCode === 500 || res.statusCode === 400) {
         return (
           <div className="text-red-600">
             Something went wrong with your request, please check your connection
@@ -57,7 +45,7 @@ function LoginForm() {
           </div>
         );
       }
-    } else if (res?.data && res?.status === 200) {
+    } else if (res?.result && res?.statusCode === 200) {
       return (
         <div className="text-green-600">You have successfully logged in.</div>
       );
@@ -76,9 +64,10 @@ function LoginForm() {
         values: Values,
         { setSubmitting }: FormikHelpers<Values>,
       ) => {
-        const res = await postRequest<SignupRes>("/user/login", values);
+        const res = await postRequest<SignInResponse>("/member/signin", values);
 
-        console.log("res:", res);
+        console.log("signin res:", res);
+
         if (isErrorResponse(res)) {
           console.log("Error", res.message);
           setRes(res);

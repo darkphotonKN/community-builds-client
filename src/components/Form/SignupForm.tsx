@@ -1,13 +1,10 @@
-import {
-  ErrorResponse,
-  isErrorResponse,
-  postRequest,
-} from "@/lib/api/requestHelpers";
-import { AxiosResponse } from "axios";
+import { isErrorResponse, postRequest } from "@/lib/api/requestHelpers";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
 import Button from "../Button";
+import { ApiResponse, ErrorResponse } from "@/type/api";
+import { SignInResponse } from "@/type/member.types";
 
 type Values = {
   name: string;
@@ -21,8 +18,8 @@ type SignupRes = {
 };
 
 function SignupForm() {
-  const [res, setRes] = useState<SignupRes | null>();
-  const [err, setErr] = useState<ErrorResponse | null>();
+  const [res, setRes] = useState<ApiResponse<SignInResponse> | null>();
+  const [err, setErr] = useState<ErrorResponse<SignInResponse> | null>();
 
   const SignupSchema = Yup.object().shape({
     name: Yup.string()
@@ -49,7 +46,7 @@ function SignupForm() {
         values: Values,
         { setSubmitting }: FormikHelpers<Values>,
       ) => {
-        const res = await postRequest<SignupRes>("/user/signup", values);
+        const res = await postRequest<SignInResponse>("/user/signup", values);
         console.log("res:", res);
 
         if (isErrorResponse(res)) {
@@ -110,14 +107,14 @@ function SignupForm() {
 
           {/* Sign Up Results */}
           <div className="mt-3">
-            {res?.data && res?.status === 201 ? (
+            {res?.result && res?.statusCode === 201 ? (
               <div className="text-green-600">
                 Your account has been successfully created. Please check your
                 email.
               </div>
-            ) : err?.status === 400 ? (
+            ) : err?.statusCode === 400 ? (
               <div className="text-red-600">{err?.message}</div>
-            ) : err?.status === 500 ? (
+            ) : err?.statusCode === 500 ? (
               <div className="text-red-600">
                 Something went wrong with your request.
               </div>

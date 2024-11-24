@@ -1,4 +1,5 @@
 import { getRequest, isErrorResponse } from "@/lib/api/requestHelpers";
+import { ApiResponse } from "@/type/api";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 
@@ -6,12 +7,6 @@ type ResError = {
   errorMessage?: unknown;
   errorCode?: number;
   errorType?: string;
-};
-
-export type ApiResponse<DataT> = {
-  status: number;
-  message: string;
-  data: DataT;
 };
 
 /*
@@ -30,7 +25,7 @@ export default function useData<ResT, DepT>(
   }, [...(dependencies ?? [])]);
 
   async function getData() {
-    const res = await getRequest<ApiResponse<ResT>>(endpoint, null, { auth });
+    const res = await getRequest<ResT>(endpoint, null, { auth });
 
     if (!res) return;
 

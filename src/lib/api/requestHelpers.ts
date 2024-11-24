@@ -1,22 +1,17 @@
 import axios from "axios";
 import axiosInstance from ".";
 import { getToken } from "../auth/jwt";
+import { ApiResponse, ErrorResponse } from "@/type/api";
 
 type RequestOptions = {
   auth?: boolean;
-};
-
-export type ErrorResponse = {
-  __type: "Error";
-  status: number;
-  message: string;
 };
 
 export async function getRequest<T, K extends Record<string, any> = any>(
   endpoint: string,
   params?: K,
   options?: RequestOptions,
-): Promise<T | null | ErrorResponse> {
+): Promise<ApiResponse<T> | null | ErrorResponse<T>> {
   try {
     const { auth } = options ?? {};
 
@@ -25,7 +20,7 @@ export async function getRequest<T, K extends Record<string, any> = any>(
       const token = getToken("access");
       headers = { ...headers, Authorization: `Bearer ${token}` };
     }
-    const response = await axiosInstance.get<T>(endpoint, {
+    const response = await axiosInstance.get<ApiResponse<T>>(endpoint, {
       params: params,
       headers,
     });
@@ -40,7 +35,7 @@ export async function postRequest<T, K = any>(
   endpoint: string,
   payload: K,
   auth?: boolean,
-): Promise<T | null | ErrorResponse> {
+): Promise<ApiResponse<T> | null | ErrorResponse<T>> {
   try {
     let headers = {};
     if (auth) {
@@ -48,9 +43,13 @@ export async function postRequest<T, K = any>(
       headers = { ...headers, Authorization: `Bearer ${token}` };
     }
 
-    const response = await axiosInstance.post<T>(endpoint, payload, {
-      headers,
-    });
+    const response = await axiosInstance.post<ApiResponse<T>>(
+      endpoint,
+      payload,
+      {
+        headers,
+      },
+    );
 
     return response?.data;
   } catch (err) {
@@ -62,7 +61,7 @@ export async function patchRequest<T, K = any>(
   endpoint: string,
   payload: K,
   auth?: boolean,
-): Promise<T | null | ErrorResponse> {
+): Promise<ApiResponse<T> | null | ErrorResponse<T>> {
   try {
     let headers = {};
     if (auth) {
@@ -70,9 +69,13 @@ export async function patchRequest<T, K = any>(
       headers = { ...headers, Authorization: `Bearer ${token}` };
     }
 
-    const response = await axiosInstance.patch<T>(endpoint, payload, {
-      headers,
-    });
+    const response = await axiosInstance.patch<ApiResponse<T>>(
+      endpoint,
+      payload,
+      {
+        headers,
+      },
+    );
 
     return response?.data;
   } catch (err) {
@@ -80,10 +83,10 @@ export async function patchRequest<T, K = any>(
   }
 }
 
-export async function deleteRequest<T, K = any>(
+export async function deleteRequest<T>(
   endpoint: string,
   auth?: boolean,
-): Promise<T | null | ErrorResponse> {
+): Promise<ApiResponse<T> | null | ErrorResponse<T>> {
   try {
     let headers = {};
     if (auth) {
@@ -91,7 +94,7 @@ export async function deleteRequest<T, K = any>(
       headers = { ...headers, Authorization: `Bearer ${token}` };
     }
 
-    const response = await axiosInstance.delete<T>(endpoint, {
+    const response = await axiosInstance.delete<ApiResponse<T>>(endpoint, {
       headers,
     });
 
@@ -101,19 +104,29 @@ export async function deleteRequest<T, K = any>(
   }
 }
 
-function handleAxiosError(err: unknown): ErrorResponse {
+/**
+ * Verifies that an error is a axios error before structuring the response.
+ **/
+
+function handleAxiosError<T>(err: unknown): ErrorResponse<T> {
   console.error("Error:", err);
   if (axios.isAxiosError(err)) {
     return {
       __type: "Error",
-      status: err?.response?.data?.status || 400,
+      statusCode: err?.response?.data?.status || 400,
       message: err?.response?.data?.message || err.message,
+      result: err?.response?.data?.result || null,
     };
   }
-  return { __type: "Error", status: 500, message: "Unknown error occured." };
+  return {
+    __type: "Error",
+    statusCode: 500,
+    message: "Unknown error occured.",
+    result: null as T,
+  };
 }
 
 // custom type guard narrowing
-export function isErrorResponse(res: any): res is ErrorResponse {
-  return res && (res as ErrorResponse).__type === "Error";
+export function isErrorResponse<T>(res: any): res is ErrorResponse<T> {
+  return res && (res as ErrorResponse<T>).__type === "Error";
 }
