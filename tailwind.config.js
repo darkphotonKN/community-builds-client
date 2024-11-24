@@ -7,9 +7,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        customGray: "#E2E8F0",
-        customBorderGray: "#CBD5E1",
-        customBgGray: "#F8FAFC",
+        customContentBg: "#313230", // primary content area bg color
+        customBg: "#151717", // primary bgh color
+        customSecondary: "#B69792", // primary secondary color, mainly used for hover and as a combo color
+        customHeaderOne: "#5A534E",
+        customHeaderTwo: "#A29FA0",
+        customHeaderThree: "#B4B5B9",
+        customTxtContent: "#F5F5F5",
       },
       boxShadow: {
         customBlockShadow:

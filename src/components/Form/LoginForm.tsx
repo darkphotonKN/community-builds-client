@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import Button from "../Button";
 import { ApiResponse, ErrorResponse } from "@/type/api";
 import { SignInResponse } from "@/type/member.types";
+import HeaderTwo from "../Layout/Text/HeaderTwo";
 
 type Values = {
   password: string;
@@ -82,7 +83,7 @@ function LoginForm() {
     >
       {({ errors, touched }) => (
         <Form className="flex flex-col justify-center">
-          <div className="text-gray-700 text-lg font-semibold">Login</div>
+          <HeaderTwo>Login</HeaderTwo>
 
           <label htmlFor="email" className="my-2">
             Email

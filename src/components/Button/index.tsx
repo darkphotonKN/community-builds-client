@@ -17,7 +17,7 @@ function Button({ text, color, type, width, height, onClick }: ButtonProps) {
 	return (
 		<button
 			type={type}
-			className={`${widthVal} ${heightVal} rounded border text-white ${color ? color : "bg-gray-700"} hover:bg-gray-300 p-2 mt-8 hover:text-gray-500 transition`}
+			className={`${widthVal} ${heightVal} rounded text-white bg-customContentBg hover:bg-customSecondary ${color ? color : "text-customSecondary"} hover:text-customTxtContent p-2 mt-8 hover:text-gray-500 transition`}
 			onClick={onClick ? onClick : undefined}
 		>
 			{text}
