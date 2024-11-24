@@ -4,7 +4,7 @@ export type TextProps = { children: ReactNode };
 
 function HeaderOne({ children }: TextProps) {
 	return (
-		<div className="text-customHeaderOne text-3xl font-semibold">
+		<div className="text-customHeaderOne text-3xl font-semibold mt-2">
 			{children}
 		</div>
 	);
