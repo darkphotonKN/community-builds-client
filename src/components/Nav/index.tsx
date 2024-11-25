@@ -11,7 +11,7 @@ function Nav() {
   return (
     <nav className="border-customContentBg bg-customContentBg rounded-md py-3 px-6 transition-colors duration-200">
       <ul className="flex items-center gap-2">
-        <MainTitle title="Community Builds" />
+        <MainTitle title="PathOfCommunity" />
         <div className="w-screen flex justify-between">
           <div className="flex items-center gap-2">
             {navData.map((navItem, index) => (
