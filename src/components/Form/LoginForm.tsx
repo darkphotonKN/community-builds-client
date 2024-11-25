@@ -119,7 +119,7 @@ function LoginForm() {
           <div className="mt-3">{renderResults(res)}</div>
 
           {/* Submit Button */}
-          <Button width={500} height={400} text="Submit" />
+          <Button width={200} text="Submit" />
         </Form>
       )}
     </Formik>

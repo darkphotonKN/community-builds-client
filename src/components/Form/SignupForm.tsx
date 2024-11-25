@@ -120,7 +120,7 @@ function SignupForm() {
           </div>
 
           {/* Submit Button */}
-          <Button width={500} height={400} text="Submit" />
+          <Button width={200} text="Submit" />
         </Form>
       )}
     </Formik>
