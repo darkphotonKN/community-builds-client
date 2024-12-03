@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
-import { Cabin, Laila, Lora, Dosis, Quicksand, Bitter } from "next/font/google";
+import {
+  Cabin,
+  Laila,
+  Lora,
+  Dosis,
+  Quicksand,
+  Bitter,
+  Nunito_Sans,
+} from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Layout/Header";
 import Nav from "@/components/Nav";
