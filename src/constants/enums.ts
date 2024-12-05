@@ -1,8 +1,24 @@
-export const ActionType = {
-  JOIN: 0x12,
-  LEAVE: 0x13,
-  EDITOR_LIST: 0x14,
-  EDIT: 0x15,
-  SYSTEM_MESSAGE: 0x16,
+/**
+Build Enums
+**/
+export const baseClass = {
+	WARRIOR: "warrior",
+	SORCEROR: "sorceror",
+	WITCH: "witch",
+	MONK: "monk",
+	MERCENARY: "mercenary",
+	RANGER: "ranger",
 } as const;
-export type ActionTypeEnum = (typeof ActionType)[keyof typeof ActionType];
+export type BaseClass = (typeof baseClass)[keyof typeof baseClass];
+
+const ascendancyClass = {
+	CHAMPION: "champion",
+	GLADIATOR: "gladiator",
+	JUGGERNAUT: "juggernaut",
+	INQUISITOR: "inquisitor",
+	HIEROPHANT: "hierophant",
+	GUARDIAN: "guardian",
+} as const;
+
+export type AscendancyClass =
+	(typeof ascendancyClass)[keyof typeof ascendancyClass];
