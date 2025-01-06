@@ -1,4 +1,4 @@
-import { AscendancyClass, BaseClass } from "@/constants/enums";
+import { AscendancyClass, BaseClass, Tag } from "@/constants/enums";
 import { create } from "zustand";
 
 type BuildState = {
@@ -7,12 +7,14 @@ type BuildState = {
 	buildDescription: string;
 	baseClassSelection: BaseClass | null;
 	ascendancyClassSelection: AscendancyClass | null;
+	tagSelection: Tag | null;
 
 	setStep: (step: number) => void;
 	setBuildName: (name: string) => void;
 	setBuildDescription: (description: string) => void;
 	setBaseClass: (classSelection: BaseClass) => void;
 	setAscendancyClass: (ascendancySelection: AscendancyClass) => void;
+	setTag: (tagSelection: Tag) => void;
 };
 
 export const useBuildStore = create<BuildState>((set) => ({
@@ -22,6 +24,7 @@ export const useBuildStore = create<BuildState>((set) => ({
 	buildDescription: "",
 	baseClassSelection: null,
 	ascendancyClassSelection: null,
+	tagSelection: null,
 
 	// methods
 	setStep: (step) => set({ step }),
@@ -30,4 +33,5 @@ export const useBuildStore = create<BuildState>((set) => ({
 	setBaseClass: (baseClassSelection) => set({ baseClassSelection }),
 	setAscendancyClass: (ascendancyClassSelection) =>
 		set({ ascendancyClassSelection }),
+	setTag: (tagSelection) => set({ tagSelection }),
 }));
