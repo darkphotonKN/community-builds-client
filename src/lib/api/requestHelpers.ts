@@ -40,7 +40,7 @@ export async function postRequest<T, K = any>(
     let headers = {};
     if (auth) {
       const token = getToken("access");
-      headers = { ...headers, Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ1MjY4MjYsImlhdCI6MTczNDUyMzIyNiwic3ViIjoiZjFjM2M2YTQtYzA0MC00Y2Y2LTllMjAtMzBlYWZjMzM5NTYwIiwidG9rZW5UeXBlIjoiYWNjZXNzIn0.6_mF-cvzG4qZ-oWBLzg717FiZ16MQP_YaT_BN7BkTWQ` };
+      headers = { ...headers, Authorization: `Bearer ${token}` };
     }
 
     const response = await axiosInstance.post<ApiResponse<T>>(
