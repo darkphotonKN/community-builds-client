@@ -10,6 +10,7 @@ import {
   Tag,
 } from "@/constants/enums";
 import { postRequest } from "@/lib/api/requestHelpers";
+import { getAscendancyChoice } from "@/lib/utils/class";
 import { useBuildStore } from "@/store/buildStore";
 
 function CreateBuildsPage() {
@@ -52,6 +53,12 @@ function CreateBuildsPage() {
       true,
     );
   };
+
+  const ascendancyChoices = baseClassSelection
+    ? getAscendancyChoice(baseClassSelection)
+    : "";
+
+  console.log("ascendancyChoices:", ascendancyChoices);
 
   const renderStep = () => {
     switch (step) {
@@ -100,7 +107,7 @@ function CreateBuildsPage() {
           <>
             <HeaderTwo>Step II - Class and Description </HeaderTwo>
             <div className="mt-6">
-              Describe what your amazing build does in a short sentence.
+              Describe what your build does in a short sentence.
             </div>
 
             <div className="justify-center mt-6">
@@ -110,9 +117,9 @@ function CreateBuildsPage() {
                 onChange={handleBuildDescription}
               />
 
-              {buildDescription.length > 0 && buildDescription.length < 30 && (
+              {buildDescription.length > 0 && buildDescription.length < 10 && (
                 <span className="text-customSecondary">
-                  Build description needs to be at least 30 characters long.
+                  Build description needs to be at least 10 characters long.
                 </span>
               )}
             </div>
