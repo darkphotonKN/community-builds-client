@@ -12,8 +12,11 @@ import {
 import { postRequest } from "@/lib/api/requestHelpers";
 import { getAscendancyChoice } from "@/lib/utils/class";
 import { useBuildStore } from "@/store/buildStore";
+import { useRouter } from "next/navigation";
 
 function CreateBuildsPage() {
+  const router = useRouter();
+
   const {
     step,
     buildName,
@@ -52,6 +55,8 @@ function CreateBuildsPage() {
       },
       true,
     );
+
+    router.push("/profile/builds/edit");
   };
 
   const ascendancyChoices = baseClassSelection
@@ -220,7 +225,7 @@ function CreateBuildsPage() {
             <div className="mt-6">
               Describe what your amazing build does in a short sentence.
             </div>
-            <Button onClick={() => {}} width={200} text="Create Item" />
+            <Button onClick={() => { }} width={200} text="Create Item" />
             <div className="flex mt-[20px] gap-[20px] flex-wrap">
               <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
                 Helmet
