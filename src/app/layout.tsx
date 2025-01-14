@@ -7,17 +7,26 @@ import {
   Quicksand,
   Bitter,
   Nunito_Sans,
+  EB_Garamond,
+  Playfair,
+  Spectral,
 } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Layout/Header";
 import Nav from "@/components/Nav";
 
-// Current Best: Cabin, Decent: Laila
-const fontFamily = Bitter({
+// Current Best: EB_Graramond, Cabin, Decent: Laila
+const fontFamily = EB_Garamond({
   weight: ["400", "500", "700"],
   style: "normal",
   subsets: ["latin"],
 });
+
+// const fontFamily = Spectral({
+//   weight: ["400", "500", "700"],
+//   style: "normal",
+//   subsets: ["latin"],
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",

@@ -18,12 +18,12 @@ export const ascendancyClass = {
   Warbringer: "Warbringer",
   Deadeye: "Deadeye",
   Pathfinder: "Pathfinder",
-  BloodMage: "BloodMage",
+  BloodMage: "Blood Mage",
   Infernalist: "Infernalist",
   Witchhunter: "Witchhunter",
-  GemlingLegionnaire: "GemlingLegionnaire",
+  GemlingLegionnaire: "Gemling Legionnaire",
   Invoker: "Invoker",
-  AcolyteOfChayula: "AcolyteOfChayula",
+  AcolyteOfChayula: "Acolyte Of Chayula",
 } as const;
 
 export type AscendancyClass =

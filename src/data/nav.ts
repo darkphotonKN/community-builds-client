@@ -11,7 +11,7 @@ export const navData: NavData = [
     link: "/",
   },
   {
-    name: "Tutorial",
+    name: "Tutorials",
     link: "/builds/create",
   },
   {

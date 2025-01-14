@@ -1,5 +1,6 @@
 "use client";
 import Button from "@/components/Button";
+import HeaderThree from "@/components/Layout/Text/HeaderThree";
 import HeaderTwo from "@/components/Layout/Text/HeaderTwo";
 import {
   BaseClass,
@@ -59,18 +60,12 @@ function CreateBuildsPage() {
     router.push("/profile/builds/edit");
   };
 
-  const ascendancyChoices = baseClassSelection
-    ? getAscendancyChoice(baseClassSelection)
-    : "";
-
-  console.log("ascendancyChoices:", ascendancyChoices);
-
   const renderStep = () => {
     switch (step) {
       case 1: {
         return (
           <>
-            <HeaderTwo>STEP I - Choose a build name.</HeaderTwo>
+            <HeaderThree>STEP I - Choose a build name.</HeaderThree>
             <div className="mt-5">
               Something as simple as{" "}
               <span className="text-customSecondary">
@@ -108,14 +103,17 @@ function CreateBuildsPage() {
       }
 
       case 2: {
+        // find underlying ascendancy array based on class selection
+        const ascendancyChoices = getAscendancyChoice(baseClassSelection) || [];
+
+        console.log("ascendancyChoices:", ascendancyChoices);
+
         return (
           <>
-            <HeaderTwo>Step II - Class and Description </HeaderTwo>
-            <div className="mt-6">
-              Describe what your build does in a short sentence.
-            </div>
+            <HeaderThree>Step II - Class and Description </HeaderThree>
+            <div className="mt-8">Provide a short overview of your build.</div>
 
-            <div className="justify-center mt-6">
+            <div className="justify-center mt-8">
               <input
                 className="w-full bg-transparent text-center text-customHeaderTwo text-2xl border-b border-customSecondary pb-1 mb-3"
                 placeholder="Build Description"
@@ -129,12 +127,14 @@ function CreateBuildsPage() {
               )}
             </div>
 
-            <div className="mt-6 text-center">
+            {/* --- Class --- */}
+
+            <div className="mt-8 text-center">
               Which <span className="text-customSecondary"> Class </span> is
               your Build for?
             </div>
 
-            <div className="flex gap-4 mt-6">
+            <div className="flex gap-4 mt-5">
               {[
                 baseClass?.WARRIOR,
                 baseClass?.SORCEROR,
@@ -151,47 +151,50 @@ function CreateBuildsPage() {
                       ? " text-customSecondary"
                       : "")
                   }
-                  onClick={() => setBaseClass(currentClass)}
+                  onClick={() => {
+                    setBaseClass(currentClass);
+
+                    // also default to selecting the first choice of the resolving ascendancy
+                    setAscendancyClass(ascendancyChoices[0]);
+                  }}
                 >
                   {currentClass}
                 </div>
               ))}
             </div>
 
-            <div className="mt-6 text-center">
+            {/* --- Ascendancy --- */}
+            <div className="mt-8 text-center">
               Which{" "}
               <span className="text-customSecondary"> Ascendancy Class </span>{" "}
               is your Build for?
             </div>
 
-            <div className="flex gap-4 mt-6">
-              {[
-                ascendancyClass?.Stormweaver,
-                ascendancyClass?.Chronomancer,
-                ascendancyClass?.Titan,
-                ascendancyClass?.Warbringer,
-              ].map((currentAscendancyClass: AscendancyClass, index) => (
-                <div
-                  key={currentAscendancyClass + index}
-                  className={
-                    "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
-                    (ascendancyClassSelection === currentAscendancyClass
-                      ? " text-customSecondary"
-                      : "")
-                  }
-                  onClick={() => setAscendancyClass(currentAscendancyClass)}
-                >
-                  {currentAscendancyClass}
-                </div>
-              ))}
+            <div className="flex gap-4 mt-5 justify-center">
+              {ascendancyChoices?.map(
+                (currentAscendancyClass: AscendancyClass, index) => (
+                  <div
+                    key={currentAscendancyClass + index}
+                    className={
+                      "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
+                      (ascendancyClassSelection === currentAscendancyClass
+                        ? " text-customSecondary"
+                        : "")
+                    }
+                    onClick={() => setAscendancyClass(currentAscendancyClass)}
+                  >
+                    {currentAscendancyClass}
+                  </div>
+                ),
+              )}
             </div>
 
-            <div className="mt-6 text-center">
-              Which <span className="text-customSecondary"> Tags </span> is your
-              Build for?
+            <div className="mt-8 text-center">
+              Which <span className="text-customSecondary"> Tags </span> should
+              be marked for your Build?
             </div>
 
-            <div className="flex gap-4 mt-6">
+            <div className="flex gap-4 mt-5">
               {[tag?.END_GAME, tag?.LEVELING, tag?.RANGER, tag?.WARRIOR].map(
                 (tag: Tag, index) => (
                   <div
@@ -222,7 +225,7 @@ function CreateBuildsPage() {
         return (
           <>
             <HeaderTwo>Step III - Create Build</HeaderTwo>
-            <div className="mt-6">
+            <div className="mt-8">
               Describe what your amazing build does in a short sentence.
             </div>
             <Button onClick={() => { }} width={200} text="Create Item" />
@@ -276,7 +279,7 @@ function CreateBuildsPage() {
         return (
           <>
             <HeaderTwo>Step IIII - Create Build Or Create Item</HeaderTwo>
-            <div className="mt-6">
+            <div className="mt-8">
               Describe what your amazing build does in a short sentence.
             </div>
 

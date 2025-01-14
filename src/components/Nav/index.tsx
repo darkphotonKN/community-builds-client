@@ -1,6 +1,5 @@
 "use client";
 import { cornerNavData, navData } from "@/data/nav";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import MainTitle from "@/components/MainTitle";
@@ -11,7 +10,7 @@ function Nav() {
   return (
     <nav className="border-customContentBg bg-customContentBg rounded-md py-3 px-6 transition-colors duration-200">
       <ul className="flex items-center gap-2">
-        <MainTitle title="PathOfCommunity" />
+        <MainTitle title="Builds of Exiles" />
         <div className="w-screen flex justify-between">
           <div className="flex items-center gap-2">
             {navData.map((navItem, index) => (
