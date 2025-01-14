@@ -7,10 +7,6 @@ type NavData = NavItem[];
 
 export const navData: NavData = [
   {
-    name: "Community",
-    link: "/",
-  },
-  {
     name: "Tutorials",
     link: "/builds/create",
   },
