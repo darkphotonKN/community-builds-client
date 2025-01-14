@@ -1,4 +1,4 @@
-import HeaderOne from "@/components/Layout/Text/HeaderOne";
+import HeaderOne from '@/components/Layout/Text/HeaderOne';
 
 function BuildEditor() {
   return (
