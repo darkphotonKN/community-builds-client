@@ -32,10 +32,14 @@ export const useBuildStore = create<BuildState>((set) => ({
   setBuildName: (name) => set({ buildName: name }),
   setBuildDescription: (description) => set({ buildDescription: description }),
   setBaseClass: (baseClassSelection) => {
+    set({ baseClassSelection });
+
     // also update ascendancy list
     const ascendancies = getAscendancyChoice(baseClassSelection);
 
-    set({ baseClassSelection });
+    if (!ascendancies) return;
+
+    set({ ascendancyClassSelection: ascendancies[0] });
   },
   setAscendancyClass: (ascendancyClassSelection) =>
     set({ ascendancyClassSelection }),
