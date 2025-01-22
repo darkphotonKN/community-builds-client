@@ -1,6 +1,6 @@
-"use client";
-import Button from "@/components/Button";
-import HeaderTwo from "@/components/Layout/Text/HeaderTwo";
+'use client';
+import Button from '@/components/Button';
+import HeaderTwo from '@/components/Layout/Text/HeaderTwo';
 import {
   BaseClass,
   baseClass,
@@ -8,11 +8,11 @@ import {
   AscendancyClass,
   tag,
   Tag,
-} from "@/constants/enums";
-import { postRequest } from "@/lib/api/requestHelpers";
-import { getAscendancyChoice } from "@/lib/utils/class";
-import { useBuildStore } from "@/store/buildStore";
-import { useRouter } from "next/navigation";
+} from '@/constants/enums';
+import { postRequest } from '@/lib/api/requestHelpers';
+import { getAscendancyChoice } from '@/lib/utils/class';
+import { useBuildStore } from '@/store/buildStore';
+import { useRouter } from 'next/navigation';
 
 function CreateBuildsPage() {
   const router = useRouter();
@@ -44,26 +44,26 @@ function CreateBuildsPage() {
 
   const handleCreateBuild = async () => {
     const res = await postRequest<any>(
-      "http://localhost:5050/api/build",
+      'http://localhost:5050/api/build',
       {
         title: buildName,
         description: buildDescription,
-        skillId: "00000000-0000-0000-0000-000000000012",
-        tagIds: ["3ac52fac-f3d8-47bf-bb8c-311fca50d53d"],
-        classId: "66666666-6666-6666-6666-666666666666",
-        ascendancyId: "66666666-6666-6666-6666-666666666667",
+        skillId: '00000000-0000-0000-0000-000000000012',
+        tagIds: ['4de7fbb5-16ca-480a-912b-16bf5bb55608'],
+        classId: '66666666-6666-6666-6666-666666666666',
+        ascendancyId: '66666666-6666-6666-6666-666666666667',
       },
-      true,
+      true
     );
 
-    router.push("/profile/builds/edit");
+    router.push('/profile/builds/edit');
   };
 
   const ascendancyChoices = baseClassSelection
     ? getAscendancyChoice(baseClassSelection)
-    : "";
+    : '';
 
-  console.log("ascendancyChoices:", ascendancyChoices);
+  console.log('ascendancyChoices:', ascendancyChoices);
 
   const renderStep = () => {
     switch (step) {
@@ -72,14 +72,14 @@ function CreateBuildsPage() {
           <>
             <HeaderTwo>STEP I - Choose a build name.</HeaderTwo>
             <div className="mt-5">
-              Something as simple as{" "}
+              Something as simple as{' '}
               <span className="text-customSecondary">
                 &quot;Cyclone Warrior&quot;
-              </span>{" "}
-              or{" "}
+              </span>{' '}
+              or{' '}
               <span className="text-customSecondary">
                 &quot;Boss Farmer&quot;
-              </span>{" "}
+              </span>{' '}
               would do. Be creative!
               <div className="flex h-[400px] justify-center items-center">
                 <input
@@ -146,10 +146,10 @@ function CreateBuildsPage() {
                 <div
                   key={currentClass + index}
                   className={
-                    "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
+                    'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
                     (baseClassSelection === currentClass
-                      ? " text-customSecondary"
-                      : "")
+                      ? ' text-customSecondary'
+                      : '')
                   }
                   onClick={() => setBaseClass(currentClass)}
                 >
@@ -159,8 +159,8 @@ function CreateBuildsPage() {
             </div>
 
             <div className="mt-6 text-center">
-              Which{" "}
-              <span className="text-customSecondary"> Ascendancy Class </span>{" "}
+              Which{' '}
+              <span className="text-customSecondary"> Ascendancy Class </span>{' '}
               is your Build for?
             </div>
 
@@ -174,10 +174,10 @@ function CreateBuildsPage() {
                 <div
                   key={currentAscendancyClass + index}
                   className={
-                    "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
+                    'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
                     (ascendancyClassSelection === currentAscendancyClass
-                      ? " text-customSecondary"
-                      : "")
+                      ? ' text-customSecondary'
+                      : '')
                   }
                   onClick={() => setAscendancyClass(currentAscendancyClass)}
                 >
@@ -197,14 +197,14 @@ function CreateBuildsPage() {
                   <div
                     key={tag + index}
                     className={
-                      "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
-                      (tagSelection === tag ? " text-customSecondary" : "")
+                      'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
+                      (tagSelection === tag ? ' text-customSecondary' : '')
                     }
                     onClick={() => setTag(tag)}
                   >
                     {tag}
                   </div>
-                ),
+                )
               )}
             </div>
             <div className="flex h-[300px] justify-center items-center"></div>
@@ -225,7 +225,7 @@ function CreateBuildsPage() {
             <div className="mt-6">
               Describe what your amazing build does in a short sentence.
             </div>
-            <Button onClick={() => { }} width={200} text="Create Item" />
+            <Button onClick={() => {}} width={200} text="Create Item" />
             <div className="flex mt-[20px] gap-[20px] flex-wrap">
               <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
                 Helmet
@@ -294,10 +294,10 @@ function CreateBuildsPage() {
     }
   };
 
-  console.log("step:", step);
-  console.log("buildName:", buildName);
-  console.log("buildDescription:", buildDescription);
-  console.log("baseClassSelection:", baseClassSelection);
+  console.log('step:', step);
+  console.log('buildName:', buildName);
+  console.log('buildDescription:', buildDescription);
+  console.log('baseClassSelection:', baseClassSelection);
 
   return (
     <div>
