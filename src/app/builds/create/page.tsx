@@ -29,6 +29,9 @@ function CreateBuildsPage() {
     baseClassSelection,
     ascendancyClassSelection,
     tagSelection,
+    ascendancies,
+    classes,
+    initializeClassAndAscendancies,
     setStep,
     setBuildName,
     setBuildDescription,
@@ -36,6 +39,11 @@ function CreateBuildsPage() {
     setAscendancyClass,
     setTag,
   } = useBuildStore();
+
+  // initialize classes and ascendancies data
+  useEffect(() => {
+    initializeClassAndAscendancies();
+  }, []);
 
   // show suggestions after a user starts writing the name + a delay timer
   useEffect(() => {
@@ -122,11 +130,6 @@ function CreateBuildsPage() {
       }
 
       case 2: {
-        // find underlying ascendancy array based on class selection
-        const ascendancyChoices = getAscendancyChoice(baseClassSelection) || [];
-
-        console.log("ascendancyChoices:", ascendancyChoices);
-
         return (
           <>
             <HeaderTwo>Step II - Class and Description </HeaderTwo>
@@ -195,22 +198,20 @@ function CreateBuildsPage() {
             </div>
 
             <div className="flex gap-4 mt-5 justify-center">
-              {ascendancyChoices?.map(
-                (currentAscendancyClass: AscendancyClass, index) => (
-                  <div
-                    key={currentAscendancyClass + index}
-                    className={
-                      "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
-                      (ascendancyClassSelection === currentAscendancyClass
-                        ? " text-customSecondary"
-                        : "")
-                    }
-                    onClick={() => setAscendancyClass(currentAscendancyClass)}
-                  >
-                    {currentAscendancyClass}
-                  </div>
-                ),
-              )}
+              {ascendancies?.map((ascendancyClass, index) => (
+                <div
+                  key={ascendancyClass.name + index}
+                  className={
+                    "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
+                    (ascendancyClassSelection?.name === ascendancyClass.name
+                      ? " text-customSecondary"
+                      : "")
+                  }
+                  onClick={() => setAscendancyClass(ascendancyClass)}
+                >
+                  {ascendancyClass.name}
+                </div>
+              ))}
             </div>
             <div className="mt-10 text-center">
               <HeaderThree>
