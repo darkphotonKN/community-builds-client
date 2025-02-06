@@ -32,17 +32,13 @@ function CreateBuildsPage() {
     setAscendancyClass,
     setTag,
   } = useBuildStore();
-
   const handleBuildName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBuildName(e.target.value);
   };
-
   const handleBuildDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBuildDescription(e.target.value);
   };
-
   const handleNextStep = (step: 2 | 3 | 4) => setStep(step);
-
   const handleCreateBuild = async () => {
     const res = await postRequest<any>(
       'http://localhost:7001/api/build',
@@ -56,10 +52,8 @@ function CreateBuildsPage() {
       },
       true
     );
-
     router.push('/profile/builds/edit');
   };
-
   const ascendancyChoices = baseClassSelection
     ? getAscendancyChoice(baseClassSelection)
     : '';
@@ -119,7 +113,6 @@ function CreateBuildsPage() {
           </>
         );
       }
-
       case 2: {
         return (
           <>
@@ -127,26 +120,22 @@ function CreateBuildsPage() {
             <div className="mt-6">
               Describe what your build does in a short sentence.
             </div>
-
             <div className="justify-center mt-6">
               <input
                 className="w-full bg-transparent text-center text-customHeaderTwo text-2xl border-b border-customSecondary pb-1 mb-3"
                 placeholder="Build Description"
                 onChange={handleBuildDescription}
               />
-
               {buildDescription.length > 0 && buildDescription.length < 10 && (
                 <span className="text-customSecondary">
                   Build description needs to be at least 10 characters long.
                 </span>
               )}
             </div>
-
             <div className="mt-6 text-center">
               Which <span className="text-customSecondary"> Class </span> is
               your Build for?
             </div>
-
             <div className="flex gap-4 mt-6">
               {[
                 baseClass?.WARRIOR,
@@ -170,13 +159,11 @@ function CreateBuildsPage() {
                 </div>
               ))}
             </div>
-
             <div className="mt-6 text-center">
               Which{' '}
               <span className="text-customSecondary"> Ascendancy Class </span>{' '}
               is your Build for?
             </div>
-
             <div className="flex gap-4 mt-6">
               {[
                 ascendancyClass?.Stormweaver,
@@ -198,12 +185,10 @@ function CreateBuildsPage() {
                 </div>
               ))}
             </div>
-
             <div className="mt-6 text-center">
               Which <span className="text-customSecondary"> Tags </span> is your
               Build for?
             </div>
-
             <div className="flex gap-4 mt-6">
               {tags &&
                 tags.map((tag: Record<string, string>) => (
@@ -220,7 +205,6 @@ function CreateBuildsPage() {
                 ))}
             </div>
             <div className="flex h-[300px] justify-center items-center"></div>
-
             <div className="flex justify-center">
               {buildName.length >= 6 && (
                 <Button onClick={handleCreateBuild} width={200} text="NEXT" />
@@ -229,7 +213,6 @@ function CreateBuildsPage() {
           </>
         );
       }
-
       case 3: {
         return (
           <>
@@ -291,7 +274,6 @@ function CreateBuildsPage() {
             <div className="mt-6">
               Describe what your amazing build does in a short sentence.
             </div>
-
             <div className="flex mt-[20px] gap-[20px]">
               <div className="flex-1 text-center cursor-pointer border border-customSecondary rounded-lg p-[40px] hover:bg-customSecondary">
                 Create Build
@@ -305,12 +287,10 @@ function CreateBuildsPage() {
       }
     }
   };
-
   console.log('step:', step);
   console.log('buildName:', buildName);
   console.log('buildDescription:', buildDescription);
   console.log('baseClassSelection:', baseClassSelection);
-
   return (
     <div>
       <div className="mb-5">
@@ -326,5 +306,4 @@ function CreateBuildsPage() {
     </div>
   );
 }
-
 export default CreateBuildsPage;

@@ -10,7 +10,7 @@ import {
 } from "@/constants/enums";
 
 export function getAscendancyChoice(
-  classChoice: BaseClass,
+  classChoice: BaseClass | null,
 ): AscendancyClass[] | undefined {
   switch (classChoice) {
     case baseClass.MERCENARY: {
