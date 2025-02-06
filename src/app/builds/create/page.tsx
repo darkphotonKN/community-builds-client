@@ -6,17 +6,18 @@ import {
   baseClass,
   ascendancyClass,
   AscendancyClass,
-  tag,
-  Tag,
 } from '@/constants/enums';
-import { postRequest } from '@/lib/api/requestHelpers';
+import { Tag } from '@/constants/type';
+import { getRequest, postRequest } from '@/lib/api/requestHelpers';
 import { getAscendancyChoice } from '@/lib/utils/class';
 import { useBuildStore } from '@/store/buildStore';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 function CreateBuildsPage() {
   const router = useRouter();
 
+  const [tags, setTags] = useState<Tag[]>();
   const {
     step,
     buildName,
@@ -44,12 +45,12 @@ function CreateBuildsPage() {
 
   const handleCreateBuild = async () => {
     const res = await postRequest<any>(
-      'http://localhost:5050/api/build',
+      'http://localhost:7001/api/build',
       {
         title: buildName,
         description: buildDescription,
         skillId: '00000000-0000-0000-0000-000000000012',
-        tagIds: ['4de7fbb5-16ca-480a-912b-16bf5bb55608'],
+        tagIds: [tagSelection],
         classId: '66666666-6666-6666-6666-666666666666',
         ascendancyId: '66666666-6666-6666-6666-666666666667',
       },
@@ -64,6 +65,18 @@ function CreateBuildsPage() {
     : '';
 
   console.log('ascendancyChoices:', ascendancyChoices);
+
+  useEffect(() => {
+    const getTags = async () => {
+      const tags = await getRequest<any>('/tag');
+
+      console.log('tags', tags);
+      if (tags?.statusCode === 200) {
+        setTags(tags.result);
+      }
+    };
+    getTags();
+  }, []);
 
   const renderStep = () => {
     switch (step) {
@@ -192,20 +205,19 @@ function CreateBuildsPage() {
             </div>
 
             <div className="flex gap-4 mt-6">
-              {[tag?.END_GAME, tag?.LEVELING, tag?.RANGER, tag?.WARRIOR].map(
-                (tag: Tag, index) => (
+              {tags &&
+                tags.map((tag: Record<string, string>) => (
                   <div
-                    key={tag + index}
+                    key={tag.id}
                     className={
                       'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
-                      (tagSelection === tag ? ' text-customSecondary' : '')
+                      (tagSelection === tag.id ? ' text-customSecondary' : '')
                     }
-                    onClick={() => setTag(tag)}
+                    onClick={() => setTag(tag.id)}
                   >
-                    {tag}
+                    {tag.name}
                   </div>
-                )
-              )}
+                ))}
             </div>
             <div className="flex h-[300px] justify-center items-center"></div>
 

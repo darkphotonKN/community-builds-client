@@ -29,11 +29,12 @@ export const ascendancyClass = {
 export type AscendancyClass =
   (typeof ascendancyClass)[keyof typeof ascendancyClass];
 
-export const tag = {
-  END_GAME: "end game",
-  LEVELING: "leveling",
-  RANGER: "ranger",
-  WARRIOR: "warrior",
-} as const;
+// export const tag = {
+//   END_GAME: "end game",
+//   LEVELING: "leveling",
+//   RANGER: "ranger",
+//   WARRIOR: "warrior",
+// } as const;
 
-export type Tag = (typeof tag)[keyof typeof tag];
+
+// export type Tag = (typeof tag)[keyof typeof tag];
