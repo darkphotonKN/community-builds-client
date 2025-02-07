@@ -10,15 +10,30 @@ import {
   postRequest,
 } from '@/lib/api/requestHelpers';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const WIKI_DOMAIN = 'https://www.poewiki.net';
 function BuildEdit() {
   const [itemCategory, setItemCategory] = useState('');
-  const [itemItems, setItems] = useState([]);
+  const [items, setItems] = useState([]);
   const [itemOptions, setItemOptions] = useState<
     { key: string; value: string }[]
   >([]);
+
+  const [baseItems, setBaseItems] = useState([]);
+  console.log('baseItems', baseItems);
+  const [baseItemOptions, setBaseItemOptions] = useState<
+    { key: string; value: string }[]
+  >([]);
+  console.log('baseItemOptions', baseItemOptions);
+
+  const [itemMods, setItemMods] = useState([]);
+  console.log('itemMods', itemMods);
+  const [itemModOptions, setItemModOptions] = useState<
+    { key: string; value: string }[]
+  >([]);
+  console.log('itemModOptions', itemModOptions);
+
   const [buildItems, setBuildItems] = useState<{ [key: string]: any }>({
     weapon: {},
     bodyArmour: {},
@@ -37,6 +52,8 @@ function BuildEdit() {
     charm3: {},
   });
 
+  const [rareItems, setRareItem] = useState<{ [key: string]: any }>({});
+  console.log('rareItems', rareItems);
   const handleSetItemCategory = (key: string, slot: string) => {
     setItemCategory(key);
     handleGetBaseItems(slot);
@@ -58,7 +75,7 @@ function BuildEdit() {
 
   const handleSelectItem = (event: any) => {
     // event.target.value
-    const targetItem = itemItems.find(
+    const targetItem = items.find(
       (item: any) => item.id === event.target.value
     );
     setBuildItems((prev) => ({
@@ -92,6 +109,84 @@ function BuildEdit() {
     }
   };
   console.log('buildItems', buildItems);
+
+  const handleRareItem = (event: any) => {
+    // event.target.value
+    const targetItem: any = baseItems.find(
+      (item: any) => item.id === event.target.value
+    );
+
+    setRareItem((prev) => {
+      return {
+        ...prev,
+        ...targetItem,
+      };
+    });
+  };
+
+  const handleSetRareItemMod = (event: any, index: number) => {
+    // event.target.value
+    const targetItem: any = itemMods.find(
+      (item: any) => item.id === event.target.value
+    );
+
+    setRareItem((prev) => {
+      let newStats: string[] = [];
+
+      if (index !== null && targetItem) {
+        if (prev.stats) {
+          newStats = [...prev.stats];
+        }
+        newStats[index] = targetItem.stat;
+      }
+
+      return {
+        ...prev,
+        stats: newStats,
+      };
+    });
+  };
+
+  const handleCreateRareItem = () => {
+    // setBuildItems(rareItems)
+    setBuildItems((prev) => ({
+      ...prev,
+      [itemCategory]: rareItems,
+    }));
+  };
+  useEffect(() => {
+    const getBaseItems = async () => {
+      const res = await getRequest<any>(`/item/base-items`, null, {
+        auth: true,
+      });
+      if (res?.statusCode === 200) {
+        const options = res.result.map((item: any) => ({
+          key: item.id,
+          value: item.name,
+        }));
+        setBaseItems(res.result);
+        setBaseItemOptions(options);
+      }
+    };
+
+    const getItemMods = async () => {
+      const res = await getRequest<any>(`/item/item-mods`, null, {
+        auth: true,
+      });
+      if (res?.statusCode === 200) {
+        const options = res.result.map((item: any) => ({
+          key: item.id,
+          value: item.stat,
+        }));
+        setItemMods(res.result);
+        setItemModOptions(options);
+      }
+    };
+
+    getBaseItems();
+    getItemMods();
+  }, []);
+
   return (
     <div>
       <div className="h-[850px]">
@@ -347,59 +442,115 @@ function BuildEdit() {
                 <HeaderThree>{itemCategory}</HeaderThree>
                 <div>
                   Base Item <br />
-                  <select name="stats" id="stats">
-                    <option value="">Increased % Maximize Mana</option>
-                    <option value="">Increased % Maximize Life</option>
-                    {/* {itemOptions?.map((option) => (
-                    <option key={option.key} value={option.key}>
-                      {option.value}
-                    </option>
-                  ))} */}
+                  <select
+                    name="stats"
+                    id="stats"
+                    onChange={(e) => handleRareItem(e)}
+                  >
+                    {baseItemOptions?.map((item: any) => (
+                      <option key={item.key} value={item.key}>
+                        {item.value}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="border border-customSecondary w-[100%] h-[1px] my-[20px]"></div>
                 <div>
                   <div>
                     state 1 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
-                      <option value="">Increased % Maximize Life</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 0)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>
                     state 2 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 1)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                       <option value="">Increased % Maximize Life</option>
                     </select>
                   </div>
                   <div>
                     state 3 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 2)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                       <option value="">Increased % Maximize Life</option>
                     </select>
                   </div>
                   <div>
                     state 4 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 3)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                       <option value="">Increased % Maximize Life</option>
                     </select>
                   </div>
                   <div>
                     state 5 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 4)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                       <option value="">Increased % Maximize Life</option>
                     </select>
                   </div>
                   <div>
                     state 6 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 5)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                       <option value="">Increased % Maximize Life</option>
                     </select>
+                  </div>
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={handleCreateRareItem}
+                      width={200}
+                      text="Create Rare Item"
+                    />
                   </div>
                 </div>
               </div>
