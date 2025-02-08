@@ -26,7 +26,7 @@ export const ascendancyClass = {
   AcolyteOfChayula: "Acolyte Of Chayula",
 } as const;
 
-export type AscendancyClass =
+export type AscendancyClassEnum =
   (typeof ascendancyClass)[keyof typeof ascendancyClass];
 
 export const tag = {

@@ -81,9 +81,11 @@ function BuildEdit() {
         },
         true,
       );
-    } catch (error) { }
+    } catch (error) {}
   };
+
   console.log("buildItems", buildItems);
+
   return (
     <div>
       <div className="h-[850px]">

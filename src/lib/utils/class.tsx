@@ -4,14 +4,14 @@
 
 import {
   ascendancyClass,
-  AscendancyClass,
+  AscendancyClassEnum,
   baseClass,
   BaseClass,
 } from "@/constants/enums";
 
 export function getAscendancyChoice(
   classChoice: BaseClass | null,
-): AscendancyClass[] | undefined {
+): AscendancyClassEnum[] | null {
   switch (classChoice) {
     case baseClass.MERCENARY: {
       return [ascendancyClass.GemlingLegionnaire, ascendancyClass.Witchhunter];
@@ -37,4 +37,6 @@ export function getAscendancyChoice(
       return [ascendancyClass.Stormweaver, ascendancyClass.Chronomancer];
     }
   }
+
+  return null;
 }

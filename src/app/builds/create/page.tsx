@@ -5,7 +5,6 @@ import {
   BaseClass,
   baseClass,
   ascendancyClass,
-  AscendancyClass,
   tag,
   Tag,
 } from "@/constants/enums";
@@ -14,6 +13,7 @@ import { getAscendancyChoice } from "@/lib/utils/class";
 import { useBuildStore } from "@/store/buildStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+
 function CreateBuildsPage() {
   const router = useRouter();
   const {
@@ -27,19 +27,21 @@ function CreateBuildsPage() {
     setBuildName,
     setBuildDescription,
     setBaseClass,
-    setAscendancyClass,
     setTag,
   } = useBuildStore();
+
   const handleBuildName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBuildName(e.target.value);
   };
+
   const handleBuildDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBuildDescription(e.target.value);
   };
+
   const handleNextStep = (step: 2 | 3 | 4) => setStep(step);
   const handleCreateBuild = async () => {
     const res = await postRequest<any>(
-      "http://localhost:5050/api/build",
+      "/api/build",
       {
         title: buildName,
         description: buildDescription,
@@ -50,11 +52,15 @@ function CreateBuildsPage() {
       },
       true,
     );
+
+    console.log("response after initial build creation:", res);
     router.push("/profile/builds/edit");
   };
+
   const ascendancyChoices = baseClassSelection
     ? getAscendancyChoice(baseClassSelection)
-    : "";
+    : [];
+
   console.log("ascendancyChoices:", ascendancyChoices);
   useEffect(() => {
     const getTags = async () => {
@@ -63,12 +69,13 @@ function CreateBuildsPage() {
     };
     getTags();
   }, []);
+
   const renderStep = () => {
     switch (step) {
       case 1: {
         return (
           <>
-            <HeaderTwo>STEP I - Choose a build name.</HeaderTwo>
+            <HeaderTwo>Step I - Choose a build name.</HeaderTwo>
             <div className="mt-5">
               Something as simple as{" "}
               <span className="text-customSecondary">
@@ -81,7 +88,7 @@ function CreateBuildsPage() {
               would do. Be creative!
               <div className="flex h-[400px] justify-center items-center">
                 <input
-                  className="w-[280px] bg-transparent text-center text-customHeaderTwo text-2xl border-b border-customSecondary pb-1"
+                  className="w-[280px] bg-transparent text-center text-customHeaderTwo text-2xl border-b border-customSecondary pb-1 outline-none focus:outline-none"
                   placeholder="Name Your Build"
                   onChange={handleBuildName}
                 />
@@ -108,12 +115,14 @@ function CreateBuildsPage() {
         return (
           <>
             <HeaderTwo>Step II - Class and Description </HeaderTwo>
+            <HeaderTwo>Description</HeaderTwo>
+
             <div className="mt-6">
               Describe what your build does in a short sentence.
             </div>
             <div className="justify-center mt-6">
               <input
-                className="w-full bg-transparent text-center text-customHeaderTwo text-2xl border-b border-customSecondary pb-1 mb-3"
+                className="w-full bg-transparent text-center text-customHeaderTwo text-xl border-b border-customSecondary pb-1 mb-3"
                 placeholder="Build Description"
                 onChange={handleBuildDescription}
               />
@@ -123,6 +132,8 @@ function CreateBuildsPage() {
                 </span>
               )}
             </div>
+
+            <div className="text-xl text-customHeaderTwo mt-6">Class</div>
             <div className="mt-6 text-center">
               Which <span className="text-customSecondary"> Class </span> is
               your Build for?
@@ -150,32 +161,22 @@ function CreateBuildsPage() {
                 </div>
               ))}
             </div>
+
+            <div className="text-xl text-customHeaderTwo mt-6">Ascendancy</div>
+
             <div className="mt-6 text-center">
               Which{" "}
               <span className="text-customSecondary"> Ascendancy Class </span>{" "}
               is your Build for?
             </div>
             <div className="flex gap-4 mt-6">
-              {[
-                ascendancyClass?.Stormweaver,
-                ascendancyClass?.Chronomancer,
-                ascendancyClass?.Titan,
-                ascendancyClass?.Warbringer,
-              ].map((currentAscendancyClass: AscendancyClass, index) => (
-                <div
-                  key={currentAscendancyClass + index}
-                  className={
-                    "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
-                    (ascendancyClassSelection === currentAscendancyClass
-                      ? " text-customSecondary"
-                      : "")
-                  }
-                  onClick={() => setAscendancyClass(currentAscendancyClass)}
-                >
-                  {currentAscendancyClass}
-                </div>
+              {ascendancyChoices?.map((ascendancyChoice) => (
+                <div>{ascendancyChoice}</div>
               ))}
             </div>
+
+            <div className="text-xl text-customHeaderTwo mt-6">Tag</div>
+
             <div className="mt-6 text-center">
               Which <span className="text-customSecondary"> Tags </span> is your
               Build for?
@@ -212,7 +213,7 @@ function CreateBuildsPage() {
             <div className="mt-6">
               Describe what your amazing build does in a short sentence.
             </div>
-            <Button onClick={() => { }} width={200} text="Create Item" />
+            <Button onClick={() => {}} width={200} text="Create Item" />
             <div className="flex mt-[20px] gap-[20px] flex-wrap">
               <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
                 Helmet
@@ -283,6 +284,7 @@ function CreateBuildsPage() {
   console.log("buildName:", buildName);
   console.log("buildDescription:", buildDescription);
   console.log("baseClassSelection:", baseClassSelection);
+
   return (
     <div>
       <div className="mb-5">

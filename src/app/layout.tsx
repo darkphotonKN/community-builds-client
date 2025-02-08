@@ -1,23 +1,13 @@
 import type { Metadata } from "next";
-import {
-  Cabin,
-  Laila,
-  Lora,
-  Dosis,
-  Quicksand,
-  Bitter,
-  Nunito_Sans,
-  EB_Garamond,
-  Playfair,
-  Spectral,
-} from "next/font/google";
+import { Lancelot } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Layout/Header";
 import Nav from "@/components/Nav";
 
-// Current Best: EB_Graramond, Cabin, Decent: Laila
-const fontFamily = EB_Garamond({
-  weight: ["400", "500", "700"],
+// Current Best: EB_Graramond, Cabin, Decent: Laila, INSANE: Lancelot
+const fontFamily = Lancelot({
+  // weight: ["400", "500", "700"],
+  weight: ["400"],
   style: "normal",
   subsets: ["latin"],
 });
