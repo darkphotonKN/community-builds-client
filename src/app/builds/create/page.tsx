@@ -29,7 +29,13 @@ function CreateBuildsPage() {
     setBuildDescription,
     setBaseClass,
     setTag,
+    initializeClassAndAscendancies,
   } = useBuildStore();
+
+  // fetch and get all classes and ascendancies data
+  useEffect(() => {
+    initializeClassAndAscendancies();
+  }, []);
 
   const handleBuildName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBuildName(e.target.value);

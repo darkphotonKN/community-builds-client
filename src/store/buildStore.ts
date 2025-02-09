@@ -36,7 +36,7 @@ type ClassAndAscendanciesResponse = {
   ascendancies: ClassAscendancy[];
 };
 
-export const useBuildStore = create<BuildState>((set) => ({
+export const useBuildStore = create<BuildState>((set, get) => ({
   // state
   step: 1,
   buildName: "",
@@ -53,6 +53,11 @@ export const useBuildStore = create<BuildState>((set) => ({
   initializeClassAndAscendancies: async () => {
     const data = await getRequest<ClassAndAscendanciesResponse>("/class");
 
+    console.log(
+      "@AscendanciesSelection class and ascendancies response data:",
+      data,
+    );
+
     set({
       ascendancies: data?.result.ascendancies,
     });
@@ -66,10 +71,13 @@ export const useBuildStore = create<BuildState>((set) => ({
   setBuildName: (name) => set({ buildName: name }),
   setBuildDescription: (description) => set({ buildDescription: description }),
   setBaseClass: (baseClassSelection) => {
+    const state = get();
     set({ baseClassSelection });
 
     // also update ascendancy list
-    const ascendancies = get().ascendancies;
+    const ascendancies = state.ascendancies;
+
+    console.log("@AscendanciesSelection ascendancies state:", ascendancies);
 
     if (!ascendancies) return;
 
