@@ -1,5 +1,6 @@
 "use client";
 import Button from "@/components/Button";
+import PrimaryInput from "@/components/Input/PrimaryInput";
 import HeaderTwo from "@/components/Layout/Text/HeaderTwo";
 import {
   BaseClass,
@@ -87,10 +88,10 @@ function CreateBuildsPage() {
               </span>{" "}
               would do. Be creative!
               <div className="flex h-[400px] justify-center items-center">
-                <input
-                  className="w-[280px] bg-transparent text-center text-customHeaderTwo text-2xl border-b border-customSecondary pb-1 outline-none focus:outline-none"
-                  placeholder="Name Your Build"
-                  onChange={handleBuildName}
+                <PrimaryInput
+                  placeHolder="Name Your Build"
+                  value={buildName}
+                  handleChangeFn={handleBuildName}
                 />
               </div>
               <div className="flex justify-center">
@@ -121,16 +122,12 @@ function CreateBuildsPage() {
               Describe what your build does in a short sentence.
             </div>
             <div className="justify-center mt-6">
-              <input
-                className="w-full bg-transparent text-center text-customHeaderTwo text-xl border-b border-customSecondary pb-1 mb-3"
-                placeholder="Build Description"
-                onChange={handleBuildDescription}
+              <PrimaryInput
+                placeHolder="Enter description"
+                handleChangeFn={handleBuildDescription}
+                value={buildDescription}
+                validation={{ length: 10 }}
               />
-              {buildDescription.length > 0 && buildDescription.length < 10 && (
-                <span className="text-customSecondary">
-                  Build description needs to be at least 10 characters long.
-                </span>
-              )}
             </div>
 
             <div className="text-xl text-customHeaderTwo mt-6">Class</div>
