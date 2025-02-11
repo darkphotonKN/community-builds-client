@@ -9,6 +9,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'web.poecdn.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   }
 };

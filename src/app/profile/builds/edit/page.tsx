@@ -201,7 +201,7 @@ function BuildEdit() {
               >
                 {buildItems['weapon']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['weapon']?.imageUrl}
+                    src={buildItems['weapon']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -220,7 +220,7 @@ function BuildEdit() {
               >
                 {buildItems['leftRing']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['leftRing']?.imageUrl}
+                    src={buildItems['leftRing']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -239,7 +239,7 @@ function BuildEdit() {
               >
                 {buildItems['rightRing']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['rightRing']?.imageUrl}
+                    src={buildItems['rightRing']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -258,7 +258,7 @@ function BuildEdit() {
               >
                 {buildItems['helmet']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['helmet']?.imageUrl}
+                    src={buildItems['helmet']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -277,7 +277,7 @@ function BuildEdit() {
               >
                 {buildItems['amulet']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['amulet']?.imageUrl}
+                    src={buildItems['amulet']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -298,7 +298,7 @@ function BuildEdit() {
               >
                 {buildItems['bodyArmour']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['bodyArmour']?.imageUrl}
+                    src={buildItems['bodyArmour']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -317,7 +317,7 @@ function BuildEdit() {
               >
                 {buildItems['offHand']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['offHand']?.imageUrl}
+                    src={buildItems['offHand']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -336,7 +336,7 @@ function BuildEdit() {
               >
                 {buildItems['gloves']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['gloves']?.imageUrl}
+                    src={buildItems['gloves']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -355,7 +355,7 @@ function BuildEdit() {
               >
                 {buildItems['boots']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['boots']?.imageUrl}
+                    src={buildItems['boots']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -374,7 +374,7 @@ function BuildEdit() {
               >
                 {buildItems['belt']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['belt']?.imageUrl}
+                    src={buildItems['belt']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -393,7 +393,7 @@ function BuildEdit() {
               >
                 {buildItems['lifeFlask']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['lifeFlask']?.imageUrl}
+                    src={buildItems['lifeFlask']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
@@ -412,7 +412,7 @@ function BuildEdit() {
               >
                 {buildItems['manaFlask']?.imageUrl ? (
                   <Image
-                    src={WIKI_DOMAIN + buildItems['manaFlask']?.imageUrl}
+                    src={buildItems['manaFlask']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
