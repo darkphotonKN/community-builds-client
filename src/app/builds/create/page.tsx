@@ -197,8 +197,8 @@ function CreateBuildsPage() {
             <div className="text-xl text-customHeaderTwo mt-6">Tag</div>
 
             <div className="mt-6 text-center">
-              Which <span className="text-customSecondary"> Tags </span> is your
-              Build for?
+              Which <span className="text-customSecondary"> Tags </span> should
+              your Build have?
             </div>
             <div className="flex gap-4 mt-6">
               {tags &&
@@ -231,7 +231,7 @@ function CreateBuildsPage() {
             <div className="mt-6">
               Describe what your amazing build does in a short sentence.
             </div>
-            <Button onClick={() => {}} width={200} text="Create Item" />
+            <Button onClick={() => { }} width={200} text="Create Item" />
             <div className="flex mt-[20px] gap-[20px] flex-wrap">
               <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
                 Helmet
