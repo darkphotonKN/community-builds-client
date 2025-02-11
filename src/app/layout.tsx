@@ -4,19 +4,12 @@ import "./globals.css";
 import Header from "@/components/Layout/Header";
 import Nav from "@/components/Nav";
 
-// Current Best: EB_Graramond, Cabin, Decent: Laila, INSANE: Lancelot
+// Current Best: Cabin, Decent: Laila
 const fontFamily = Lancelot({
-  // weight: ["400", "500", "700"],
   weight: ["400"],
   style: "normal",
   subsets: ["latin"],
 });
-
-// const fontFamily = Spectral({
-//   weight: ["400", "500", "700"],
-//   style: "normal",
-//   subsets: ["latin"],
-// });
 
 export const metadata: Metadata = {
   title: "Create Next App",

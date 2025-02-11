@@ -6,17 +6,19 @@ import {
   BaseClass,
   baseClass,
   ascendancyClass,
-  tag,
-  Tag,
+  AscendancyClassEnum,
 } from "@/constants/enums";
+import { Tag } from "@/constants/type";
 import { getRequest, postRequest } from "@/lib/api/requestHelpers";
 import { getAscendancyChoice } from "@/lib/utils/class";
 import { useBuildStore } from "@/store/buildStore";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function CreateBuildsPage() {
   const router = useRouter();
+
+  const [tags, setTags] = useState<Tag[]>();
   const {
     step,
     buildName,
@@ -53,7 +55,7 @@ function CreateBuildsPage() {
         title: buildName,
         description: buildDescription,
         skillId: "00000000-0000-0000-0000-000000000012",
-        tagIds: ["4de7fbb5-16ca-480a-912b-16bf5bb55608"],
+        tagIds: [tagSelection],
         classId: "66666666-6666-6666-6666-666666666666",
         ascendancyId: "66666666-6666-6666-6666-666666666667",
       },
@@ -72,7 +74,11 @@ function CreateBuildsPage() {
   useEffect(() => {
     const getTags = async () => {
       const tags = await getRequest<any>("/tag");
+
       console.log("tags", tags);
+      if (tags?.statusCode === 200) {
+        setTags(tags.result);
+      }
     };
     getTags();
   }, []);
@@ -173,8 +179,24 @@ function CreateBuildsPage() {
               is your Build for?
             </div>
             <div className="flex gap-4 mt-6">
-              {ascendancyChoices?.map((ascendancyChoice) => (
-                <div>{ascendancyChoice}</div>
+              {[
+                ascendancyClass?.Stormweaver,
+                ascendancyClass?.Chronomancer,
+                ascendancyClass?.Titan,
+                ascendancyClass?.Warbringer,
+              ].map((currentAscendancyClass: AscendancyClassEnum, index) => (
+                <div
+                  key={currentAscendancyClass + index}
+                  className={
+                    "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
+                    (ascendancyClassSelection === currentAscendancyClass
+                      ? " text-customSecondary"
+                      : "")
+                  }
+                  onClick={() => setAscendancyClass(currentAscendancyClass)}
+                >
+                  {currentAscendancyClass}
+                </div>
               ))}
             </div>
 
@@ -185,20 +207,19 @@ function CreateBuildsPage() {
               Build for?
             </div>
             <div className="flex gap-4 mt-6">
-              {[tag?.END_GAME, tag?.LEVELING, tag?.RANGER, tag?.WARRIOR].map(
-                (tag: Tag, index) => (
+              {tags &&
+                tags.map((tag: Record<string, string>) => (
                   <div
-                    key={tag + index}
+                    key={tag.id}
                     className={
                       "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
-                      (tagSelection === tag ? " text-customSecondary" : "")
+                      (tagSelection === tag.id ? " text-customSecondary" : "")
                     }
-                    onClick={() => setTag(tag)}
+                    onClick={() => setTag(tag.id)}
                   >
-                    {tag}
+                    {tag.name}
                   </div>
-                ),
-              )}
+                ))}
             </div>
             <div className="flex h-[300px] justify-center items-center"></div>
             <div className="flex justify-center">
@@ -283,6 +304,7 @@ function CreateBuildsPage() {
       }
     }
   };
+
   console.log("step:", step);
   console.log("buildName:", buildName);
   console.log("buildDescription:", buildDescription);

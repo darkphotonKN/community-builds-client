@@ -18,7 +18,7 @@ function BuildsPage() {
           Spark remains one of the most versatile skills in Path of Exile 2,
           capable of both clear and single-target damage. This build leverages
           the new weapon enhancement system to create a symphony of lightning
-          that fills the screen with deadly projectiles. Using the Inquisitor's
+          that fills the screen with deadly projectiles. Using the Inquisitors
           critical strike potential, we ignore enemy resistances to achieve
           consistent damage output.
         </p>

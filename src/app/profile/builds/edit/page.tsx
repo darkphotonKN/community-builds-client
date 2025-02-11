@@ -4,17 +4,36 @@ import ItemInfoCard from "@/components/Card/ItemInfoCard";
 import HeaderOne from "@/components/Layout/Text/HeaderOne";
 import HeaderThree from "@/components/Layout/Text/HeaderThree";
 import HeaderTwo from "@/components/Layout/Text/HeaderTwo";
-import { getRequest, postRequest } from "@/lib/api/requestHelpers";
+import {
+  getRequest,
+  patchRequest,
+  postRequest,
+} from "@/lib/api/requestHelpers";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const WIKI_DOMAIN = "https://www.poewiki.net";
 function BuildEdit() {
   const [itemCategory, setItemCategory] = useState("");
-  const [itemItems, setItems] = useState([]);
+  const [items, setItems] = useState([]);
   const [itemOptions, setItemOptions] = useState<
     { key: string; value: string }[]
   >([]);
+
+  const [baseItems, setBaseItems] = useState([]);
+  console.log("baseItems", baseItems);
+  const [baseItemOptions, setBaseItemOptions] = useState<
+    { key: string; value: string }[]
+  >([]);
+  console.log("baseItemOptions", baseItemOptions);
+
+  const [itemMods, setItemMods] = useState([]);
+  console.log("itemMods", itemMods);
+  const [itemModOptions, setItemModOptions] = useState<
+    { key: string; value: string }[]
+  >([]);
+  console.log("itemModOptions", itemModOptions);
+
   const [buildItems, setBuildItems] = useState<{ [key: string]: any }>({
     weapon: {},
     bodyArmour: {},
@@ -33,6 +52,8 @@ function BuildEdit() {
     charm3: {},
   });
 
+  const [rareItems, setRareItem] = useState<{ [key: string]: any }>({});
+  console.log("rareItems", rareItems);
   const handleSetItemCategory = (key: string, slot: string) => {
     setItemCategory(key);
     handleGetBaseItems(slot);
@@ -54,7 +75,7 @@ function BuildEdit() {
 
   const handleSelectItem = (event: any) => {
     // event.target.value
-    const targetItem = itemItems.find(
+    const targetItem = items.find(
       (item: any) => item.id === event.target.value,
     );
     setBuildItems((prev) => ({
@@ -64,12 +85,13 @@ function BuildEdit() {
   };
 
   const handleCreateBuildSet = async () => {
+    console.log("handleCreateBuildSet buildItems", buildItems);
     try {
-      const res = await postRequest<any>(
-        "http://localhost:5050/api/build/4f34c91b-8433-4eab-a1a5-bd3384ea24ca/updateSet",
+      const res = await patchRequest<any>(
+        "/build/96a39db4-2dc6-4291-8f11-8a81f66c4fca/update-set",
         {
           weapon: buildItems.weapon.id,
-          shield: buildItems.offhand.id,
+          shield: buildItems.offHand.id,
           helmet: buildItems.helmet.id,
           bodyArmour: buildItems.bodyArmour.id,
           gloves: buildItems.gloves.id,
@@ -81,10 +103,89 @@ function BuildEdit() {
         },
         true,
       );
-    } catch (error) {}
+      console.log("res", res);
+    } catch (error) {
+      console.log("err", error);
+    }
+  };
+  console.log("buildItems", buildItems);
+
+  const handleRareItem = (event: any) => {
+    // event.target.value
+    const targetItem: any = baseItems.find(
+      (item: any) => item.id === event.target.value,
+    );
+
+    setRareItem((prev) => {
+      return {
+        ...prev,
+        ...targetItem,
+      };
+    });
   };
 
-  console.log("buildItems", buildItems);
+  const handleSetRareItemMod = (event: any, index: number) => {
+    // event.target.value
+    const targetItem: any = itemMods.find(
+      (item: any) => item.id === event.target.value,
+    );
+
+    setRareItem((prev) => {
+      let newStats: string[] = [];
+
+      if (index !== null && targetItem) {
+        if (prev.stats) {
+          newStats = [...prev.stats];
+        }
+        newStats[index] = targetItem.stat;
+      }
+
+      return {
+        ...prev,
+        stats: newStats,
+      };
+    });
+  };
+
+  const handleCreateRareItem = () => {
+    // setBuildItems(rareItems)
+    setBuildItems((prev) => ({
+      ...prev,
+      [itemCategory]: rareItems,
+    }));
+  };
+  useEffect(() => {
+    const getBaseItems = async () => {
+      const res = await getRequest<any>(`/item/base-items`, null, {
+        auth: true,
+      });
+      if (res?.statusCode === 200) {
+        const options = res.result.map((item: any) => ({
+          key: item.id,
+          value: item.name,
+        }));
+        setBaseItems(res.result);
+        setBaseItemOptions(options);
+      }
+    };
+
+    const getItemMods = async () => {
+      const res = await getRequest<any>(`/item/item-mods`, null, {
+        auth: true,
+      });
+      if (res?.statusCode === 200) {
+        const options = res.result.map((item: any) => ({
+          key: item.id,
+          value: item.stat,
+        }));
+        setItemMods(res.result);
+        setItemModOptions(options);
+      }
+    };
+
+    getBaseItems();
+    getItemMods();
+  }, []);
 
   return (
     <div>
@@ -95,7 +196,7 @@ function BuildEdit() {
             <HeaderOne>Build Items</HeaderOne>
             <div className="relative w-[700px] h-[500px] mt-[100px]">
               <div
-                onClick={() => handleSetItemCategory("weapon", "Weapon")}
+                onClick={() => handleSetItemCategory("weapon", "weapon")}
                 className="weapon group absolute top-[0%] left-[0%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[300px]"
               >
                 {buildItems["weapon"]?.imageUrl ? (
@@ -114,7 +215,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("leftRing", "Rings")}
+                onClick={() => handleSetItemCategory("leftRing", "rings")}
                 className="left-ring group absolute top-[44%] left-[25%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[80px] h-[80px]"
               >
                 {buildItems["leftRing"]?.imageUrl ? (
@@ -133,7 +234,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("rightRing", "Rings")}
+                onClick={() => handleSetItemCategory("rightRing", "rings")}
                 className="right-ring group absolute top-[44%] left-[64%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[80px] h-[80px]"
               >
                 {buildItems["rightRing"]?.imageUrl ? (
@@ -152,7 +253,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("helmet", "Helmet")}
+                onClick={() => handleSetItemCategory("helmet", "helmet")}
                 className="helmet group absolute top-[-10%] left-[40%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[150px]"
               >
                 {buildItems["helmet"]?.imageUrl ? (
@@ -171,7 +272,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("amulet", "Amulet")}
+                onClick={() => handleSetItemCategory("amulet", "amulet")}
                 className="amulet group absolute top-[-10%] left-[64%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[80px] h-[80px]"
               >
                 {buildItems["amulet"]?.imageUrl ? (
@@ -191,7 +292,7 @@ function BuildEdit() {
               </div>
               <div
                 onClick={() =>
-                  handleSetItemCategory("bodyArmour", "Body Armour")
+                  handleSetItemCategory("bodyArmour", "body Armour")
                 }
                 className="body-armour group absolute top-[25%] left-[40%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[250px]"
               >
@@ -211,7 +312,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("offHand", "Shield")}
+                onClick={() => handleSetItemCategory("offHand", "shield")}
                 className="off-hand group absolute top-[0%] right-[0%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[300px]"
               >
                 {buildItems["offHand"]?.imageUrl ? (
@@ -230,7 +331,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("gloves", "Gloves")}
+                onClick={() => handleSetItemCategory("gloves", "gloves")}
                 className="gloves group absolute top-[65%] left-[16%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[150px]"
               >
                 {buildItems["gloves"]?.imageUrl ? (
@@ -249,7 +350,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("boots", "Boots")}
+                onClick={() => handleSetItemCategory("boots", "boots")}
                 className="boots group absolute top-[65%] left-[64%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[150px]"
               >
                 {buildItems["boots"]?.imageUrl ? (
@@ -268,7 +369,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("belt", "Belt")}
+                onClick={() => handleSetItemCategory("belt", "belt")}
                 className="belt group absolute top-[79%] left-[40%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[80px]"
               >
                 {buildItems["belt"]?.imageUrl ? (
@@ -287,7 +388,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("lifeFlask", "Flask")}
+                onClick={() => handleSetItemCategory("lifeFlask", "flask")}
                 className="life-flask group absolute top-[100%] left-[21%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[80px] h-[150px]"
               >
                 {buildItems["lifeFlask"]?.imageUrl ? (
@@ -306,7 +407,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("manaFlask", "Flask")}
+                onClick={() => handleSetItemCategory("manaFlask", "flask")}
                 className="mana-flask group absolute top-[100%] left-[69%] flex items-center justify-center text-center border cursor-pointer border-customSecondary rounded-lg w-[80px] h-[150px]"
               >
                 {buildItems["manaFlask"]?.imageUrl ? (
@@ -325,7 +426,7 @@ function BuildEdit() {
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("charm", "Charm")}
+                onClick={() => handleSetItemCategory("charm", "charm")}
                 className="charm group absolute top-[105%] left-[36%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[210px] h-[70px]"
               >
                 Charm
@@ -341,59 +442,115 @@ function BuildEdit() {
                 <HeaderThree>{itemCategory}</HeaderThree>
                 <div>
                   Base Item <br />
-                  <select name="stats" id="stats">
-                    <option value="">Increased % Maximize Mana</option>
-                    <option value="">Increased % Maximize Life</option>
-                    {/* {itemOptions?.map((option) => (
-                    <option key={option.key} value={option.key}>
-                      {option.value}
-                    </option>
-                  ))} */}
+                  <select
+                    name="stats"
+                    id="stats"
+                    onChange={(e) => handleRareItem(e)}
+                  >
+                    {baseItemOptions?.map((item: any) => (
+                      <option key={item.key} value={item.key}>
+                        {item.value}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="border border-customSecondary w-[100%] h-[1px] my-[20px]"></div>
                 <div>
                   <div>
                     state 1 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
-                      <option value="">Increased % Maximize Life</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 0)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>
                     state 2 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 1)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                       <option value="">Increased % Maximize Life</option>
                     </select>
                   </div>
                   <div>
                     state 3 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 2)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                       <option value="">Increased % Maximize Life</option>
                     </select>
                   </div>
                   <div>
                     state 4 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 3)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                       <option value="">Increased % Maximize Life</option>
                     </select>
                   </div>
                   <div>
                     state 5 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 4)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                       <option value="">Increased % Maximize Life</option>
                     </select>
                   </div>
                   <div>
                     state 6 <br />
-                    <select name="stats" id="stats">
-                      <option value="">Increased % Maximize Mana</option>
+                    <select
+                      name="stats"
+                      id="stats"
+                      onChange={(e) => handleSetRareItemMod(e, 5)}
+                    >
+                      {itemModOptions?.map((item: any) => (
+                        <option key={item.key} value={item.key}>
+                          {item.value}
+                        </option>
+                      ))}
                       <option value="">Increased % Maximize Life</option>
                     </select>
+                  </div>
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={handleCreateRareItem}
+                      width={200}
+                      text="Create Rare Item"
+                    />
                   </div>
                 </div>
               </div>
