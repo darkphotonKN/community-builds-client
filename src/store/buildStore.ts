@@ -1,4 +1,4 @@
-import { AscendancyClassEnum, BaseClass, Tag } from "@/constants/enums";
+import { AscendancyClassEnum, BaseClass } from "@/constants/enums";
 import { getRequest } from "@/lib/api/requestHelpers";
 import { getAscendancyChoice } from "@/lib/utils/class";
 import { create } from "zustand";
@@ -9,7 +9,7 @@ type BuildState = {
   buildDescription: string;
   baseClassSelection: BaseClass | null;
   ascendancyClassSelection: ClassAscendancy | null;
-  tagSelection: Tag | null;
+  tagSelection: string | null;
   classes: ClassAscendancy[];
   ascendancies: ClassAscendancy[];
 
@@ -18,7 +18,7 @@ type BuildState = {
   setBuildDescription: (description: string) => void;
   setBaseClass: (classSelection: BaseClass) => void;
   setAscenancyClassEnum: (ascendancySelection: ClassAscendancy) => void;
-  setTag: (tagSelection: Tag) => void;
+  setTag: (tagSelection: string) => void;
   initializeClassAndAscendancies: () => void;
 };
 

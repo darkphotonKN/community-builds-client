@@ -179,23 +179,17 @@ function CreateBuildsPage() {
               is your Build for?
             </div>
             <div className="flex gap-4 mt-6">
-              {[
-                ascendancyClass?.Stormweaver,
-                ascendancyClass?.Chronomancer,
-                ascendancyClass?.Titan,
-                ascendancyClass?.Warbringer,
-              ].map((currentAscendancyClass: AscendancyClassEnum, index) => (
+              {ascendancyChoices?.map((ascendancyChoice) => (
                 <div
-                  key={currentAscendancyClass + index}
+                  key={ascendancyChoice}
                   className={
                     "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
-                    (ascendancyClassSelection === currentAscendancyClass
+                    (ascendancyChoice === ascendancyClassSelection?.name
                       ? " text-customSecondary"
                       : "")
                   }
-                  onClick={() => setAscendancyClass(currentAscendancyClass)}
                 >
-                  {currentAscendancyClass}
+                  {ascendancyChoice}
                 </div>
               ))}
             </div>
