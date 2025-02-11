@@ -174,7 +174,17 @@ function CreateBuildsPage() {
             </div>
             <div className="flex gap-4 mt-6">
               {ascendancyChoices?.map((ascendancyChoice) => (
-                <div>{ascendancyChoice}</div>
+                <div
+                  key={ascendancyChoice}
+                  className={
+                    "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
+                    (ascendancyChoice === ascendancyClassSelection?.name
+                      ? " text-customSecondary"
+                      : "")
+                  }
+                >
+                  {ascendancyChoice}
+                </div>
               ))}
             </div>
 
