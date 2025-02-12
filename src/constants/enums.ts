@@ -23,7 +23,7 @@ export const ascendancyClass = {
   Witchhunter: "Witchhunter",
   GemlingLegionnaire: "Gemling Legionnaire",
   Invoker: "Invoker",
-  AcolyteOfChayula: "Acolyte Of Chayula",
+  AcolyteOfChayula: "Acolyte of Chayula",
 } as const;
 
 export type AscendancyClassEnum =

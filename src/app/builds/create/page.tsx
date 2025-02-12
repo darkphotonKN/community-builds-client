@@ -20,6 +20,8 @@ function CreateBuildsPage() {
 
   const [tags, setTags] = useState<Tag[]>();
   const {
+    ascendancies,
+    classes,
     step,
     buildName,
     buildDescription,
@@ -30,6 +32,7 @@ function CreateBuildsPage() {
     setBuildName,
     setBuildDescription,
     setBaseClass,
+    setAscendancyClass,
     setTag,
     initializeClassAndAscendancies,
   } = useBuildStore();
@@ -67,7 +70,7 @@ function CreateBuildsPage() {
   };
 
   const ascendancyChoices = baseClassSelection
-    ? getAscendancyChoice(baseClassSelection)
+    ? getAscendancyChoice(baseClassSelection, ascendancies)
     : [];
 
   console.log("ascendancyChoices:", ascendancyChoices);
@@ -148,16 +151,9 @@ function CreateBuildsPage() {
               your Build for?
             </div>
             <div className="flex gap-4 mt-6">
-              {[
-                baseClass?.WARRIOR,
-                baseClass?.SORCEROR,
-                baseClass?.WITCH,
-                baseClass?.MONK,
-                baseClass?.MERCENARY,
-                baseClass?.RANGER,
-              ].map((currentClass: BaseClass, index) => (
+              {classes.map((currentClass) => (
                 <div
-                  key={currentClass + index}
+                  key={currentClass.id}
                   className={
                     "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
                     (baseClassSelection === currentClass
@@ -166,7 +162,7 @@ function CreateBuildsPage() {
                   }
                   onClick={() => setBaseClass(currentClass)}
                 >
-                  {currentClass}
+                  {currentClass.name}
                 </div>
               ))}
             </div>
@@ -181,15 +177,16 @@ function CreateBuildsPage() {
             <div className="flex gap-4 mt-6">
               {ascendancyChoices?.map((ascendancyChoice) => (
                 <div
-                  key={ascendancyChoice}
+                  key={ascendancyChoice.id}
                   className={
                     "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
-                    (ascendancyChoice === ascendancyClassSelection?.name
+                    (ascendancyChoice.name === ascendancyClassSelection?.name
                       ? " text-customSecondary"
                       : "")
                   }
+                  onClick={() => setAscendancyClass(ascendancyChoice)}
                 >
-                  {ascendancyChoice}
+                  {ascendancyChoice.name}
                 </div>
               ))}
             </div>

@@ -1,13 +1,13 @@
 import { AscendancyClassEnum, BaseClass } from "@/constants/enums";
 import { getRequest } from "@/lib/api/requestHelpers";
-import { getAscendancyChoice } from "@/lib/utils/class";
+import { ClassAscendancy } from "@/type/build.types";
 import { create } from "zustand";
 
 type BuildState = {
   step: number;
   buildName: string;
   buildDescription: string;
-  baseClassSelection: BaseClass | null;
+  baseClassSelection: ClassAscendancy | null;
   ascendancyClassSelection: ClassAscendancy | null;
   tagSelection: string | null;
   classes: ClassAscendancy[];
@@ -16,19 +16,10 @@ type BuildState = {
   setStep: (step: number) => void;
   setBuildName: (name: string) => void;
   setBuildDescription: (description: string) => void;
-  setBaseClass: (classSelection: BaseClass) => void;
-  setAscenancyClassEnum: (ascendancySelection: ClassAscendancy) => void;
+  setBaseClass: (classSelection: ClassAscendancy) => void;
+  setAscendancyClass: (ascendancySelection: ClassAscendancy) => void;
   setTag: (tagSelection: string) => void;
   initializeClassAndAscendancies: () => void;
-};
-
-type ClassAscendancy = {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  name: string;
-  description: string;
-  imageUrl: string;
 };
 
 type ClassAndAscendanciesResponse = {
@@ -53,10 +44,7 @@ export const useBuildStore = create<BuildState>((set, get) => ({
   initializeClassAndAscendancies: async () => {
     const data = await getRequest<ClassAndAscendanciesResponse>("/class");
 
-    console.log(
-      "@AscendanciesSelection class and ascendancies response data:",
-      data,
-    );
+    console.log("@AscendanciesSelection response data:", data);
 
     set({
       ascendancies: data?.result.ascendancies,
@@ -84,7 +72,8 @@ export const useBuildStore = create<BuildState>((set, get) => ({
     set({ ascendancyClassSelection: ascendancies[0] });
   },
 
-  setAscenancyClassEnum: (ascendancyClassSelection) =>
+  setAscendancyClass: (ascendancyClassSelection) =>
     set({ ascendancyClassSelection }),
+
   setTag: (tagSelection) => set({ tagSelection }),
 }));
