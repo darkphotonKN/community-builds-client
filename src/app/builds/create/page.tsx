@@ -9,10 +9,15 @@ import {
   AscendancyClassEnum,
 } from "@/constants/enums";
 import { Tag } from "@/constants/type";
-import { getRequest, postRequest } from "@/lib/api/requestHelpers";
+import {
+  getRequest,
+  isErrorResponse,
+  postRequest,
+} from "@/lib/api/requestHelpers";
 import { getAscendancyChoice } from "@/lib/utils/class";
 import { useBuildStore } from "@/store/buildStore";
 import { useRouter } from "next/navigation";
+import { title } from "process";
 import { useEffect, useState } from "react";
 
 function CreateBuildsPage() {
@@ -53,19 +58,26 @@ function CreateBuildsPage() {
   const handleNextStep = (step: 2 | 3 | 4) => setStep(step);
   const handleCreateBuild = async () => {
     const res = await postRequest<any>(
-      "/api/build",
+      "/build",
       {
         title: buildName,
         description: buildDescription,
         skillId: "00000000-0000-0000-0000-000000000012",
-        tagIds: [tagSelection],
-        classId: "66666666-6666-6666-6666-666666666666",
-        ascendancyId: "66666666-6666-6666-6666-666666666667",
+        tagIds: ["0d29edd8-9fcc-4398-9270-052246250b34"],
+        classId: baseClassSelection?.id,
+        ascendancyId: ascendancyClassSelection?.id,
       },
       true,
     );
 
     console.log("response after initial build creation:", res);
+
+    if (isErrorResponse(res)) {
+      // TODO: update popup styling
+      alert(res.result);
+      return;
+    }
+
     router.push("/profile/builds/edit");
   };
 
@@ -85,6 +97,13 @@ function CreateBuildsPage() {
     };
     getTags();
   }, []);
+
+  console.log("@SubmitInfo ", {
+    ascendancyClassSelection,
+    baseClassSelection,
+    buildDescription,
+    buildName,
+  });
 
   const renderStep = () => {
     switch (step) {

@@ -1,5 +1,6 @@
 import { AscendancyClassEnum, BaseClass } from "@/constants/enums";
 import { getRequest } from "@/lib/api/requestHelpers";
+import { getAscendancyChoice } from "@/lib/utils/class";
 import { ClassAscendancy } from "@/type/build.types";
 import { create } from "zustand";
 
@@ -46,13 +47,22 @@ export const useBuildStore = create<BuildState>((set, get) => ({
 
     console.log("@AscendanciesSelection response data:", data);
 
+    const { classes, ascendancies } = data?.result || {};
+
     set({
-      ascendancies: data?.result.ascendancies,
+      ascendancies,
     });
 
     set({
-      classes: data?.result.classes,
+      classes,
     });
+
+    // set base class as warrior
+
+    if (!classes) return;
+
+    const state = get();
+    state.setBaseClass(classes[0]);
   },
 
   setStep: (step) => set({ step }),
@@ -62,14 +72,26 @@ export const useBuildStore = create<BuildState>((set, get) => ({
     const state = get();
     set({ baseClassSelection });
 
-    // also update ascendancy list
+    // also update ascendancy list to select the first one
     const ascendancies = state.ascendancies;
 
     console.log("@AscendanciesSelection ascendancies state:", ascendancies);
 
     if (!ascendancies) return;
 
-    set({ ascendancyClassSelection: ascendancies[0] });
+    const correspondingAscendancies = getAscendancyChoice(
+      baseClassSelection,
+      ascendancies,
+    );
+
+    console.log(
+      "updated correspondingAscendancies:",
+      correspondingAscendancies,
+    );
+
+    if (!correspondingAscendancies) return;
+
+    set({ ascendancyClassSelection: correspondingAscendancies[0] });
   },
 
   setAscendancyClass: (ascendancyClassSelection) =>
