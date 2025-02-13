@@ -9,7 +9,11 @@ import {
   AscendancyClassEnum,
 } from '@/constants/enums';
 import { Tag } from '@/constants/type';
-import { getRequest, postRequest } from '@/lib/api/requestHelpers';
+import {
+  getRequest,
+  isErrorResponse,
+  postRequest,
+} from '@/lib/api/requestHelpers';
 import { getAscendancyChoice } from '@/lib/utils/class';
 import { useBuildStore } from '@/store/buildStore';
 import { useRouter } from 'next/navigation';
@@ -20,6 +24,8 @@ function CreateBuildsPage() {
 
   const [tags, setTags] = useState<Tag[]>();
   const {
+    ascendancies,
+    classes,
     step,
     buildName,
     buildDescription,
@@ -30,6 +36,7 @@ function CreateBuildsPage() {
     setBuildName,
     setBuildDescription,
     setBaseClass,
+    setAscendancyClass,
     setTag,
     initializeClassAndAscendancies,
   } = useBuildStore();
@@ -55,19 +62,26 @@ function CreateBuildsPage() {
         title: buildName,
         description: buildDescription,
         skillId: '00000000-0000-0000-0000-000000000012',
-        tagIds: [tagSelection],
-        classId: '66666666-6666-6666-6666-666666666666',
-        ascendancyId: '66666666-6666-6666-6666-666666666667',
+        tagIds: ['0d29edd8-9fcc-4398-9270-052246250b34'],
+        classId: baseClassSelection?.id,
+        ascendancyId: ascendancyClassSelection?.id,
       },
       true
     );
 
     console.log('response after initial build creation:', res);
+
+    if (isErrorResponse(res)) {
+      // TODO: update popup styling
+      alert(res.result);
+      return;
+    }
+
     router.push('/profile/builds/edit');
   };
 
   const ascendancyChoices = baseClassSelection
-    ? getAscendancyChoice(baseClassSelection)
+    ? getAscendancyChoice(baseClassSelection, ascendancies)
     : [];
 
   console.log('ascendancyChoices:', ascendancyChoices);
@@ -82,6 +96,13 @@ function CreateBuildsPage() {
     };
     getTags();
   }, []);
+
+  console.log('@SubmitInfo ', {
+    ascendancyClassSelection,
+    baseClassSelection,
+    buildDescription,
+    buildName,
+  });
 
   const renderStep = () => {
     switch (step) {
@@ -148,16 +169,9 @@ function CreateBuildsPage() {
               your Build for?
             </div>
             <div className="flex gap-4 mt-6">
-              {[
-                baseClass?.WARRIOR,
-                baseClass?.SORCEROR,
-                baseClass?.WITCH,
-                baseClass?.MONK,
-                baseClass?.MERCENARY,
-                baseClass?.RANGER,
-              ].map((currentClass: BaseClass, index) => (
+              {classes.map((currentClass) => (
                 <div
-                  key={currentClass + index}
+                  key={currentClass.id}
                   className={
                     'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
                     (baseClassSelection === currentClass
@@ -166,7 +180,7 @@ function CreateBuildsPage() {
                   }
                   onClick={() => setBaseClass(currentClass)}
                 >
-                  {currentClass}
+                  {currentClass.name}
                 </div>
               ))}
             </div>
@@ -181,15 +195,16 @@ function CreateBuildsPage() {
             <div className="flex gap-4 mt-6">
               {ascendancyChoices?.map((ascendancyChoice) => (
                 <div
-                  key={ascendancyChoice}
+                  key={ascendancyChoice.id}
                   className={
                     'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
-                    (ascendancyChoice === ascendancyClassSelection?.name
+                    (ascendancyChoice.name === ascendancyClassSelection?.name
                       ? ' text-customSecondary'
                       : '')
                   }
+                  onClick={() => setAscendancyClass(ascendancyChoice)}
                 >
-                  {ascendancyChoice}
+                  {ascendancyChoice.name}
                 </div>
               ))}
             </div>
@@ -197,8 +212,8 @@ function CreateBuildsPage() {
             <div className="text-xl text-customHeaderTwo mt-6">Tag</div>
 
             <div className="mt-6 text-center">
-              Which <span className="text-customSecondary"> Tags </span> is your
-              Build for?
+              Which <span className="text-customSecondary"> Tags </span> should
+              your Build have?
             </div>
             <div className="flex gap-4 mt-6">
               {tags &&
