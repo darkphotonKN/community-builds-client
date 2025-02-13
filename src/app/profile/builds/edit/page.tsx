@@ -1,38 +1,38 @@
-"use client";
-import Button from "@/components/Button";
-import ItemInfoCard from "@/components/Card/ItemInfoCard";
-import HeaderOne from "@/components/Layout/Text/HeaderOne";
-import HeaderThree from "@/components/Layout/Text/HeaderThree";
-import HeaderTwo from "@/components/Layout/Text/HeaderTwo";
+'use client';
+import Button from '@/components/Button';
+import ItemInfoCard from '@/components/Card/ItemInfoCard';
+import HeaderOne from '@/components/Layout/Text/HeaderOne';
+import HeaderThree from '@/components/Layout/Text/HeaderThree';
+import HeaderTwo from '@/components/Layout/Text/HeaderTwo';
 import {
   getRequest,
   patchRequest,
   postRequest,
-} from "@/lib/api/requestHelpers";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+} from '@/lib/api/requestHelpers';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
-const WIKI_DOMAIN = "https://www.poewiki.net";
+const WIKI_DOMAIN = 'https://www.poewiki.net';
 function BuildEdit() {
-  const [itemCategory, setItemCategory] = useState("");
+  const [itemCategory, setItemCategory] = useState('');
   const [items, setItems] = useState([]);
   const [itemOptions, setItemOptions] = useState<
     { key: string; value: string }[]
   >([]);
 
   const [baseItems, setBaseItems] = useState([]);
-  console.log("baseItems", baseItems);
+  console.log('baseItems', baseItems);
   const [baseItemOptions, setBaseItemOptions] = useState<
     { key: string; value: string }[]
   >([]);
-  console.log("baseItemOptions", baseItemOptions);
+  console.log('baseItemOptions', baseItemOptions);
 
   const [itemMods, setItemMods] = useState([]);
-  console.log("itemMods", itemMods);
+  console.log('itemMods', itemMods);
   const [itemModOptions, setItemModOptions] = useState<
     { key: string; value: string }[]
   >([]);
-  console.log("itemModOptions", itemModOptions);
+  console.log('itemModOptions', itemModOptions);
 
   const [buildItems, setBuildItems] = useState<{ [key: string]: any }>({
     weapon: {},
@@ -53,7 +53,7 @@ function BuildEdit() {
   });
 
   const [rareItems, setRareItem] = useState<{ [key: string]: any }>({});
-  console.log("rareItems", rareItems);
+  console.log('rareItems', rareItems);
   const handleSetItemCategory = (key: string, slot: string) => {
     setItemCategory(key);
     handleGetBaseItems(slot);
@@ -76,7 +76,7 @@ function BuildEdit() {
   const handleSelectItem = (event: any) => {
     // event.target.value
     const targetItem = items.find(
-      (item: any) => item.id === event.target.value,
+      (item: any) => item.id === event.target.value
     );
     setBuildItems((prev) => ({
       ...prev,
@@ -85,10 +85,10 @@ function BuildEdit() {
   };
 
   const handleCreateBuildSet = async () => {
-    console.log("handleCreateBuildSet buildItems", buildItems);
+    console.log('handleCreateBuildSet buildItems', buildItems);
     try {
       const res = await patchRequest<any>(
-        "/build/96a39db4-2dc6-4291-8f11-8a81f66c4fca/update-set",
+        '/build/96a39db4-2dc6-4291-8f11-8a81f66c4fca/update-set',
         {
           weapon: buildItems.weapon.id,
           shield: buildItems.offHand.id,
@@ -101,19 +101,20 @@ function BuildEdit() {
           leftRing: buildItems.leftRing.id,
           rightRing: buildItems.rightRing.id,
         },
-        true,
+
+        true
       );
-      console.log("res", res);
+      console.log('res', res);
     } catch (error) {
-      console.log("err", error);
+      console.log('err', error);
     }
   };
-  console.log("buildItems", buildItems);
+  console.log('buildItems', buildItems);
 
   const handleRareItem = (event: any) => {
     // event.target.value
     const targetItem: any = baseItems.find(
-      (item: any) => item.id === event.target.value,
+      (item: any) => item.id === event.target.value
     );
 
     setRareItem((prev) => {
@@ -127,7 +128,7 @@ function BuildEdit() {
   const handleSetRareItemMod = (event: any, index: number) => {
     // event.target.value
     const targetItem: any = itemMods.find(
-      (item: any) => item.id === event.target.value,
+      (item: any) => item.id === event.target.value
     );
 
     setRareItem((prev) => {
@@ -147,13 +148,23 @@ function BuildEdit() {
     });
   };
 
-  const handleCreateRareItem = () => {
+  const handleCreateRareItem = async (toList: boolean) => {
     // setBuildItems(rareItems)
-    setBuildItems((prev) => ({
-      ...prev,
-      [itemCategory]: rareItems,
-    }));
+    console.log('rareItems', rareItems);
+    const payload = {
+      baseItemId: rareItems.id,
+      states: rareItems.stats,
+      ...(toList && { toList: true }),
+    };
+    const res = await postRequest<any>(`/item/rare-item`, payload, true);
+    if (res?.statusCode === 200) {
+      setBuildItems((prev) => ({
+        ...prev,
+        [itemCategory]: { ...rareItems, id: res.result },
+      }));
+    }
   };
+
   useEffect(() => {
     const getBaseItems = async () => {
       const res = await getRequest<any>(`/item/base-items`, null, {
@@ -196,236 +207,236 @@ function BuildEdit() {
             <HeaderOne>Build Items</HeaderOne>
             <div className="relative w-[700px] h-[500px] mt-[100px]">
               <div
-                onClick={() => handleSetItemCategory("weapon", "weapon")}
+                onClick={() => handleSetItemCategory('weapon', 'weapon')}
                 className="weapon group absolute top-[0%] left-[0%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[300px]"
               >
-                {buildItems["weapon"]?.imageUrl ? (
+                {buildItems['weapon']?.imageUrl ? (
                   <Image
-                    src={buildItems["weapon"]?.imageUrl}
+                    src={buildItems['weapon']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "Weapon"
+                  'Weapon'
                 )}
-                {buildItems["weapon"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["weapon"]} />
+                {buildItems['weapon']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['weapon']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("leftRing", "rings")}
+                onClick={() => handleSetItemCategory('leftRing', 'rings')}
                 className="left-ring group absolute top-[44%] left-[25%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[80px] h-[80px]"
               >
-                {buildItems["leftRing"]?.imageUrl ? (
+                {buildItems['leftRing']?.imageUrl ? (
                   <Image
-                    src={buildItems["leftRing"]?.imageUrl}
+                    src={buildItems['leftRing']?.imageUrl}
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "L Ring"
+                  'L Ring'
                 )}
-                {buildItems["leftRing"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["leftRing"]} />
+                {buildItems['leftRing']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['leftRing']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("rightRing", "rings")}
+                onClick={() => handleSetItemCategory('rightRing', 'rings')}
                 className="right-ring group absolute top-[44%] left-[64%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[80px] h-[80px]"
               >
-                {buildItems["rightRing"]?.imageUrl ? (
+                {buildItems['rightRing']?.imageUrl ? (
                   <Image
-                    src={buildItems["rightRing"]?.imageUrl}
+                    src={buildItems['rightRing']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "R Ring"
+                  'R Ring'
                 )}
-                {buildItems["rightRing"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["rightRing"]} />
+                {buildItems['rightRing']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['rightRing']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("helmet", "helmet")}
+                onClick={() => handleSetItemCategory('helmet', 'helmet')}
                 className="helmet group absolute top-[-10%] left-[40%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[150px]"
               >
-                {buildItems["helmet"]?.imageUrl ? (
+                {buildItems['helmet']?.imageUrl ? (
                   <Image
-                    src={buildItems["helmet"]?.imageUrl}
+                    src={buildItems['helmet']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "Helmet"
+                  'Helmet'
                 )}
-                {buildItems["helmet"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["helmet"]} />
+                {buildItems['helmet']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['helmet']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("amulet", "amulet")}
+                onClick={() => handleSetItemCategory('amulet', 'amulet')}
                 className="amulet group absolute top-[-10%] left-[64%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[80px] h-[80px]"
               >
-                {buildItems["amulet"]?.imageUrl ? (
+                {buildItems['amulet']?.imageUrl ? (
                   <Image
-                    src={buildItems["amulet"]?.imageUrl}
+                    src={buildItems['amulet']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "Amulet"
+                  'Amulet'
                 )}
-                {buildItems["amulet"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["amulet"]} />
+                {buildItems['amulet']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['amulet']} />
                 )}
               </div>
               <div
                 onClick={() =>
-                  handleSetItemCategory("bodyArmour", "body Armour")
+                  handleSetItemCategory('bodyArmour', 'body Armour')
                 }
                 className="body-armour group absolute top-[25%] left-[40%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[250px]"
               >
-                {buildItems["bodyArmour"]?.imageUrl ? (
+                {buildItems['bodyArmour']?.imageUrl ? (
                   <Image
-                    src={buildItems["bodyArmour"]?.imageUrl}
+                    src={buildItems['bodyArmour']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "Body Armour"
+                  'Body Armour'
                 )}
-                {buildItems["bodyArmour"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["bodyArmour"]} />
+                {buildItems['bodyArmour']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['bodyArmour']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("offHand", "shield")}
+                onClick={() => handleSetItemCategory('offHand', 'shield')}
                 className="off-hand group absolute top-[0%] right-[0%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[300px]"
               >
-                {buildItems["offHand"]?.imageUrl ? (
+                {buildItems['offHand']?.imageUrl ? (
                   <Image
-                    src={buildItems["offHand"]?.imageUrl}
+                    src={buildItems['offHand']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "Off Hand"
+                  'Off Hand'
                 )}
-                {buildItems["offHand"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["offHand"]} />
+                {buildItems['offHand']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['offHand']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("gloves", "gloves")}
+                onClick={() => handleSetItemCategory('gloves', 'gloves')}
                 className="gloves group absolute top-[65%] left-[16%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[150px]"
               >
-                {buildItems["gloves"]?.imageUrl ? (
+                {buildItems['gloves']?.imageUrl ? (
                   <Image
-                    src={buildItems["gloves"]?.imageUrl}
+                    src={buildItems['gloves']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "Gloves"
+                  'Gloves'
                 )}
-                {buildItems["gloves"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["gloves"]} />
+                {buildItems['gloves']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['gloves']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("boots", "boots")}
+                onClick={() => handleSetItemCategory('boots', 'boots')}
                 className="boots group absolute top-[65%] left-[64%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[150px]"
               >
-                {buildItems["boots"]?.imageUrl ? (
+                {buildItems['boots']?.imageUrl ? (
                   <Image
-                    src={buildItems["boots"]?.imageUrl}
+                    src={buildItems['boots']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "Boots"
+                  'Boots'
                 )}
-                {buildItems["boots"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["boots"]} />
+                {buildItems['boots']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['boots']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("belt", "belt")}
+                onClick={() => handleSetItemCategory('belt', 'belt')}
                 className="belt group absolute top-[79%] left-[40%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[150px] h-[80px]"
               >
-                {buildItems["belt"]?.imageUrl ? (
+                {buildItems['belt']?.imageUrl ? (
                   <Image
-                    src={buildItems["belt"]?.imageUrl}
+                    src={buildItems['belt']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "Belt"
+                  'Belt'
                 )}
-                {buildItems["belt"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["belt"]} />
+                {buildItems['belt']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['belt']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("lifeFlask", "flask")}
+                onClick={() => handleSetItemCategory('lifeFlask', 'flask')}
                 className="life-flask group absolute top-[100%] left-[21%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[80px] h-[150px]"
               >
-                {buildItems["lifeFlask"]?.imageUrl ? (
+                {buildItems['lifeFlask']?.imageUrl ? (
                   <Image
-                    src={buildItems["lifeFlask"]?.imageUrl}
+                    src={buildItems['lifeFlask']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "Life Flask"
+                  'Life Flask'
                 )}
-                {buildItems["lifeFlask"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["lifeFlask"]} />
+                {buildItems['lifeFlask']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['lifeFlask']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("manaFlask", "flask")}
+                onClick={() => handleSetItemCategory('manaFlask', 'flask')}
                 className="mana-flask group absolute top-[100%] left-[69%] flex items-center justify-center text-center border cursor-pointer border-customSecondary rounded-lg w-[80px] h-[150px]"
               >
-                {buildItems["manaFlask"]?.imageUrl ? (
+                {buildItems['manaFlask']?.imageUrl ? (
                   <Image
-                    src={buildItems["manaFlask"]?.imageUrl}
+                    src={buildItems['manaFlask']?.imageUrl}
                     className="w-[fit-content]"
                     alt=""
                     width={150}
                     height={300}
                   ></Image>
                 ) : (
-                  "Mana Flask"
+                  'Mana Flask'
                 )}
-                {buildItems["manaFlask"]?.imageUrl && (
-                  <ItemInfoCard data={buildItems["manaFlask"]} />
+                {buildItems['manaFlask']?.imageUrl && (
+                  <ItemInfoCard data={buildItems['manaFlask']} />
                 )}
               </div>
               <div
-                onClick={() => handleSetItemCategory("charm", "charm")}
+                onClick={() => handleSetItemCategory('charm', 'charm')}
                 className="charm group absolute top-[105%] left-[36%] flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[210px] h-[70px]"
               >
                 Charm
@@ -544,11 +555,16 @@ function BuildEdit() {
                       <option value="">Increased % Maximize Life</option>
                     </select>
                   </div>
-                  <div className="flex justify-center">
+                  <div className="flex justify-center gap-4">
                     <Button
-                      onClick={handleCreateRareItem}
+                      onClick={() => handleCreateRareItem(false)}
                       width={200}
                       text="Create Rare Item"
+                    />
+                    <Button
+                      onClick={() => handleCreateRareItem(true)}
+                      width={200}
+                      text="Create Rare Item To List"
                     />
                   </div>
                 </div>
