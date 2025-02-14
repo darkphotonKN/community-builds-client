@@ -12,6 +12,23 @@ import {
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
+const DEFAULT_BUILDS = {
+  weapon: {},
+  bodyArmour: {},
+  helmet: {},
+  leftRing: {},
+  rightRing: {},
+  amulet: {},
+  boots: {},
+  gloves: {},
+  offHand: {},
+  belt: {},
+  lifeFlask: {},
+  manaFlask: {},
+  charm1: {},
+  charm2: {},
+  charm3: {},
+};
 const WIKI_DOMAIN = 'https://www.poewiki.net';
 function BuildEdit() {
   const [itemCategory, setItemCategory] = useState('');
@@ -34,36 +51,23 @@ function BuildEdit() {
   >([]);
   console.log('itemModOptions', itemModOptions);
 
-  const [buildItems, setBuildItems] = useState<{ [key: string]: any }>({
-    weapon: {},
-    bodyArmour: {},
-    helmet: {},
-    leftRing: {},
-    rightRing: {},
-    amulet: {},
-    boots: {},
-    gloves: {},
-    offHand: {},
-    belt: {},
-    lifeFlask: {},
-    manaFlask: {},
-    charm1: {},
-    charm2: {},
-    charm3: {},
-  });
+  const [buildItems, setBuildItems] = useState<{ [key: string]: any }>(
+    DEFAULT_BUILDS
+  );
 
   const [rareItems, setRareItem] = useState<{ [key: string]: any }>({});
   console.log('rareItems', rareItems);
   const handleSetItemCategory = (key: string, slot: string) => {
     setItemCategory(key);
-    handleGetBaseItems(slot);
+    handleGetItems(slot);
   };
 
-  const handleGetBaseItems = async (slot: string) => {
+  const handleGetItems = async (slot: string) => {
     const res = await getRequest<any>(`/item?slot=${slot}`, null, {
       auth: true,
     });
     if (res?.statusCode === 200) {
+      console.log('res.result', res.result);
       const options = res.result.map((item: any) => ({
         key: item.id,
         value: item.name,
@@ -78,10 +82,14 @@ function BuildEdit() {
     const targetItem = items.find(
       (item: any) => item.id === event.target.value
     );
-    setBuildItems((prev) => ({
-      ...prev,
-      [itemCategory]: targetItem,
-    }));
+    setBuildItems((prev) => {
+      const savedItems = {
+        ...prev,
+        [itemCategory]: targetItem,
+      };
+      localStorage.setItem('buildItems', JSON.stringify(savedItems));
+      return savedItems;
+    });
   };
 
   const handleCreateBuildSet = async () => {
@@ -108,6 +116,12 @@ function BuildEdit() {
     } catch (error) {
       console.log('err', error);
     }
+  };
+
+  const handleClearBuildSet = async () => {
+    setBuildItems(DEFAULT_BUILDS);
+
+    localStorage.setItem('buildItems', JSON.stringify(DEFAULT_BUILDS));
   };
   console.log('buildItems', buildItems);
 
@@ -158,10 +172,14 @@ function BuildEdit() {
     };
     const res = await postRequest<any>(`/item/rare-item`, payload, true);
     if (res?.statusCode === 200) {
-      setBuildItems((prev) => ({
-        ...prev,
-        [itemCategory]: { ...rareItems, id: res.result },
-      }));
+      setBuildItems((prev) => {
+        const savedItems = {
+          ...prev,
+          [itemCategory]: { ...rareItems, id: res.result },
+        };
+        localStorage.setItem('buildItems', JSON.stringify(savedItems));
+        return savedItems;
+      });
     }
   };
 
@@ -196,6 +214,14 @@ function BuildEdit() {
 
     getBaseItems();
     getItemMods();
+  }, []);
+
+  useEffect(() => {
+    const localstorageBuildItems = localStorage.getItem('buildItems');
+    if (localstorageBuildItems) {
+      const parse = JSON.parse(localstorageBuildItems);
+      setBuildItems(parse);
+    }
   }, []);
 
   return (
@@ -573,8 +599,8 @@ function BuildEdit() {
               <div>
                 Unique Item <br />
                 <select name="unique" id="unique" onChange={handleSelectItem}>
-                  {itemOptions?.map((item: any) => (
-                    <option key={item.key} value={item.key}>
+                  {itemOptions?.map((item: any, index) => (
+                    <option key={item.key + item.value} value={item.key}>
                       {item.value}
                     </option>
                   ))}
@@ -584,7 +610,8 @@ function BuildEdit() {
           )}
         </div>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center gap-4">
+        <Button onClick={handleClearBuildSet} width={200} text="Clear" />
         <Button
           onClick={handleCreateBuildSet}
           width={200}
