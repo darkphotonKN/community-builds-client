@@ -45,16 +45,14 @@ function CreateBuildsPage() {
 
   const handleNextStep = (step: 2 | 3 | 4) => setStep(step);
   const handleCreateBuild = async () => {
+    const tagIds = [tagSelection];
     const res = await postRequest<any>(
       "/build",
       {
         title: buildName,
         description: buildDescription,
         skillId: "00000000-0000-0000-0000-000000000012",
-        tagIds: [
-          "10000000-0000-0000-0000-000000000000",
-          "40000000-0000-0000-0000-000000000000",
-        ],
+        tagIds,
         classId: baseClassSelection?.id,
         ascendancyId: ascendancyClassSelection?.id,
       },
@@ -192,9 +190,9 @@ function CreateBuildsPage() {
                     key={tag.id}
                     className={
                       "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
-                      (tagSelection === tag.name ? " text-customSecondary" : "")
+                      (tagSelection === tag.id ? " text-customSecondary" : "")
                     }
-                    onClick={() => setTagSelection(tag.name)}
+                    onClick={() => setTagSelection(tag.id)}
                   >
                     {tag.name}
                   </div>
