@@ -24,6 +24,7 @@ function CreateBuildsPage() {
     baseClassSelection,
     ascendancyClassSelection,
     tags,
+    tagSelection,
     setStep,
     setBuildName,
     setBuildDescription,
@@ -290,6 +291,8 @@ function CreateBuildsPage() {
   console.log("buildName:", buildName);
   console.log("buildDescription:", buildDescription);
   console.log("baseClassSelection:", baseClassSelection);
+
+  console.log({ tags });
 
   return (
     <div>
