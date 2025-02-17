@@ -2,28 +2,15 @@
 import Button from "@/components/Button";
 import PrimaryInput from "@/components/Input/PrimaryInput";
 import HeaderTwo from "@/components/Layout/Text/HeaderTwo";
-import {
-  BaseClass,
-  baseClass,
-  ascendancyClass,
-  AscendancyClassEnum,
-} from "@/constants/enums";
-import { Tag } from "@/constants/type";
-import {
-  getRequest,
-  isErrorResponse,
-  postRequest,
-} from "@/lib/api/requestHelpers";
+import { isErrorResponse, postRequest } from "@/lib/api/requestHelpers";
 import { getAscendancyChoice } from "@/lib/utils/class";
 import { useBuildStore } from "@/store/buildStore";
 import { useRouter } from "next/navigation";
-import { title } from "process";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function CreateBuildsPage() {
   const router = useRouter();
 
-  const [tags, setTags] = useState<Tag[]>();
   const {
     ascendancies,
     classes,
@@ -32,19 +19,18 @@ function CreateBuildsPage() {
     buildDescription,
     baseClassSelection,
     ascendancyClassSelection,
-    tagSelection,
+    tags,
     setStep,
     setBuildName,
     setBuildDescription,
     setBaseClass,
     setAscendancyClass,
-    setTag,
-    initializeClassAndAscendancies,
+    initializeBuildData,
   } = useBuildStore();
 
-  // fetch and get all classes and ascendancies data
+  // fetch and intial data required for generating the build creation process
   useEffect(() => {
-    initializeClassAndAscendancies();
+    initializeBuildData();
   }, []);
 
   const handleBuildName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +49,10 @@ function CreateBuildsPage() {
         title: buildName,
         description: buildDescription,
         skillId: "00000000-0000-0000-0000-000000000012",
-        tagIds: ["0d29edd8-9fcc-4398-9270-052246250b34"],
+        tagIds: [
+          "10000000-0000-0000-0000-000000000000",
+          "40000000-0000-0000-0000-000000000000",
+        ],
         classId: baseClassSelection?.id,
         ascendancyId: ascendancyClassSelection?.id,
       },
@@ -86,17 +75,6 @@ function CreateBuildsPage() {
     : [];
 
   console.log("ascendancyChoices:", ascendancyChoices);
-  useEffect(() => {
-    const getTags = async () => {
-      const tags = await getRequest<any>("/tag");
-
-      console.log("tags", tags);
-      if (tags?.statusCode === 200) {
-        setTags(tags.result);
-      }
-    };
-    getTags();
-  }, []);
 
   console.log("@SubmitInfo ", {
     ascendancyClassSelection,
@@ -112,15 +90,6 @@ function CreateBuildsPage() {
           <>
             <HeaderTwo>Step I - Choose a build name.</HeaderTwo>
             <div className="mt-5">
-              Something as simple as{" "}
-              <span className="text-customSecondary">
-                &quot;Cyclone Warrior&quot;
-              </span>{" "}
-              or{" "}
-              <span className="text-customSecondary">
-                &quot;Boss Farmer&quot;
-              </span>{" "}
-              would do. Be creative!
               <div className="flex h-[400px] justify-center items-center">
                 <PrimaryInput
                   placeHolder="Name Your Build"
@@ -218,14 +187,14 @@ function CreateBuildsPage() {
             </div>
             <div className="flex gap-4 mt-6">
               {tags &&
-                tags.map((tag: Record<string, string>) => (
+                tags.map((tag) => (
                   <div
                     key={tag.id}
                     className={
                       "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
                       (tagSelection === tag.id ? " text-customSecondary" : "")
                     }
-                    onClick={() => setTag(tag.id)}
+                    onClick={() => { }}
                   >
                     {tag.name}
                   </div>
