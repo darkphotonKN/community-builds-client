@@ -2,11 +2,7 @@
 import Button from "@/components/Button";
 import PrimaryInput from "@/components/Input/PrimaryInput";
 import HeaderTwo from "@/components/Layout/Text/HeaderTwo";
-import {
-  getRequest,
-  isErrorResponse,
-  postRequest,
-} from "@/lib/api/requestHelpers";
+import { isErrorResponse, postRequest } from "@/lib/api/requestHelpers";
 import { getAscendancyChoice } from "@/lib/utils/class";
 import { useBuildStore } from "@/store/buildStore";
 import { useRouter } from "next/navigation";
