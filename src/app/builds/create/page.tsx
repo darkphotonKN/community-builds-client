@@ -26,10 +26,11 @@ function CreateBuildsPage() {
     setBuildDescription,
     setBaseClass,
     setAscendancyClass,
+    setTagSelection,
     initializeBuildData,
   } = useBuildStore();
 
-  // fetch and intial data required for generating the build creation process
+  // fetch and intialize data required for generating the build creation process
   useEffect(() => {
     initializeBuildData();
   }, []);
@@ -193,9 +194,9 @@ function CreateBuildsPage() {
                     key={tag.id}
                     className={
                       "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
-                      (tagSelection === tag.id ? " text-customSecondary" : "")
+                      (tagSelection === tag.name ? " text-customSecondary" : "")
                     }
-                    onClick={() => { }}
+                    onClick={() => setTagSelection(tag.name)}
                   >
                     {tag.name}
                   </div>
