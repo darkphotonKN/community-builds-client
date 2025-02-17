@@ -1,4 +1,4 @@
-import { ApiResponse, BaseEntity } from "./api";
+import { BaseEntity } from "./api";
 
 export type CreateBuildResponse = {};
 
@@ -20,5 +20,3 @@ export type ClassAndAscendanciesResponse = {
 export type TagApiData = {
   name: string;
 } & BaseEntity;
-
-export type TagResponse = ApiResponse<TagApiData[]>;
