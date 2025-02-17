@@ -24,7 +24,7 @@ type BuildState = {
   setBaseClass: (classSelection: ClassAscendancy) => void;
   setAscendancyClass: (ascendancySelection: ClassAscendancy) => void;
   setTagSelection: (tagSelection: string) => void;
-  setTags: (tags?: TagApiData[]) => void;
+  setTags: (tags: TagApiData[]) => void;
   initializeBuildData: () => void;
 };
 
@@ -46,8 +46,6 @@ export const useBuildStore = create<BuildState>((set, get) => ({
   initializeBuildData: async () => {
     const classData = await getRequest<ClassAndAscendanciesResponse>("/class");
 
-    console.log("@AscendanciesSelection response data:", classData);
-
     const { classes, ascendancies } = classData?.result || {};
 
     set({
@@ -63,18 +61,19 @@ export const useBuildStore = create<BuildState>((set, get) => ({
     if (!classes) return;
 
     const state = get();
+
     state.setBaseClass(classes[0]); // note this function also automatically sets ascendancies to the first choice of that class
 
     const tagData = await getRequest<TagApiData[]>("/tag");
 
-    state.setTags(tagData?.result);
+    state.setTags(tagData?.result ?? []);
   },
 
   setStep: (step) => set({ step }),
   setBuildName: (name) => set({ buildName: name }),
   setBuildDescription: (description) => set({ buildDescription: description }),
   setTagSelection: (tagSelection: string) => set({ tagSelection }),
-  setTags: (tags?: TagApiData[]) => ({ tags }),
+  setTags: (tags: TagApiData[]) => set({ tags }),
   setBaseClass: (baseClassSelection) => {
     const state = get();
     set({ baseClassSelection });
