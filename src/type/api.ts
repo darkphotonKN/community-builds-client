@@ -15,3 +15,9 @@ export type ApiResponse<DataT> = {
 export type ErrorResponse<DataT> = ApiResponse<DataT> & {
   __type: "Error";
 };
+
+export type BaseEntity = {
+  id: string;
+  created_at: Date;
+  updated_at: Date;
+};

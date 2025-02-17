@@ -1,7 +1,11 @@
-import { AscendancyClassEnum, BaseClass } from "@/constants/enums";
 import { getRequest } from "@/lib/api/requestHelpers";
 import { getAscendancyChoice } from "@/lib/utils/class";
-import { ClassAscendancy } from "@/type/build.types";
+import {
+  ClassAndAscendanciesResponse,
+  ClassAscendancy,
+  TagApiData,
+  TagResponse,
+} from "@/type/build.types";
 import { create } from "zustand";
 
 type BuildState = {
@@ -10,22 +14,18 @@ type BuildState = {
   buildDescription: string;
   baseClassSelection: ClassAscendancy | null;
   ascendancyClassSelection: ClassAscendancy | null;
-  tagSelection: string | null;
   classes: ClassAscendancy[];
   ascendancies: ClassAscendancy[];
+  tags: TagApiData[];
+  tagSelection: string | null;
 
   setStep: (step: number) => void;
   setBuildName: (name: string) => void;
   setBuildDescription: (description: string) => void;
   setBaseClass: (classSelection: ClassAscendancy) => void;
   setAscendancyClass: (ascendancySelection: ClassAscendancy) => void;
-  setTag: (tagSelection: string) => void;
-  initializeClassAndAscendancies: () => void;
-};
-
-type ClassAndAscendanciesResponse = {
-  classes: ClassAscendancy[];
-  ascendancies: ClassAscendancy[];
+  setTagSelection: (tagSelection: string) => void;
+  initializeBuildData: () => void;
 };
 
 export const useBuildStore = create<BuildState>((set, get) => ({
@@ -38,16 +38,17 @@ export const useBuildStore = create<BuildState>((set, get) => ({
   ascendancies: [],
   ascendancyClassSelection: null,
   tagSelection: null,
+  tags: [],
 
   // methods
 
   // initializes classes via api request from the server
-  initializeClassAndAscendancies: async () => {
-    const data = await getRequest<ClassAndAscendanciesResponse>("/class");
+  initializeBuildData: async () => {
+    const classData = await getRequest<ClassAndAscendanciesResponse>("/class");
 
-    console.log("@AscendanciesSelection response data:", data);
+    console.log("@AscendanciesSelection response data:", classData);
 
-    const { classes, ascendancies } = data?.result || {};
+    const { classes, ascendancies } = classData?.result || {};
 
     set({
       ascendancies,
@@ -62,12 +63,19 @@ export const useBuildStore = create<BuildState>((set, get) => ({
     if (!classes) return;
 
     const state = get();
-    state.setBaseClass(classes[0]);
+    state.setBaseClass(classes[0]); // note this function also automatically sets ascendancies to the first choice of that class
+
+    const tagData = await getRequest<TagResponse>("/tag");
+
+    set({
+      tags: tagData,
+    });
   },
 
   setStep: (step) => set({ step }),
   setBuildName: (name) => set({ buildName: name }),
   setBuildDescription: (description) => set({ buildDescription: description }),
+  setTagSelection: (tagSelection: string) => set({ tagSelection }),
   setBaseClass: (baseClassSelection) => {
     const state = get();
     set({ baseClassSelection });

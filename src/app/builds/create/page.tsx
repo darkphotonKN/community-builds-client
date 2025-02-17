@@ -1,28 +1,20 @@
-'use client';
-import Button from '@/components/Button';
-import PrimaryInput from '@/components/Input/PrimaryInput';
-import HeaderTwo from '@/components/Layout/Text/HeaderTwo';
-import {
-  BaseClass,
-  baseClass,
-  ascendancyClass,
-  AscendancyClassEnum,
-} from '@/constants/enums';
-import { Tag } from '@/constants/type';
+"use client";
+import Button from "@/components/Button";
+import PrimaryInput from "@/components/Input/PrimaryInput";
+import HeaderTwo from "@/components/Layout/Text/HeaderTwo";
 import {
   getRequest,
   isErrorResponse,
   postRequest,
-} from '@/lib/api/requestHelpers';
-import { getAscendancyChoice } from '@/lib/utils/class';
-import { useBuildStore } from '@/store/buildStore';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+} from "@/lib/api/requestHelpers";
+import { getAscendancyChoice } from "@/lib/utils/class";
+import { useBuildStore } from "@/store/buildStore";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 function CreateBuildsPage() {
   const router = useRouter();
 
-  const [tags, setTags] = useState<Tag[]>();
   const {
     ascendancies,
     classes,
@@ -31,19 +23,18 @@ function CreateBuildsPage() {
     buildDescription,
     baseClassSelection,
     ascendancyClassSelection,
-    tagSelection,
+    tags,
     setStep,
     setBuildName,
     setBuildDescription,
     setBaseClass,
     setAscendancyClass,
-    setTag,
-    initializeClassAndAscendancies,
+    initializeBuildData,
   } = useBuildStore();
 
-  // fetch and get all classes and ascendancies data
+  // fetch and intial data required for generating the build creation process
   useEffect(() => {
-    initializeClassAndAscendancies();
+    initializeBuildData();
   }, []);
 
   const handleBuildName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,19 +48,22 @@ function CreateBuildsPage() {
   const handleNextStep = (step: 2 | 3 | 4) => setStep(step);
   const handleCreateBuild = async () => {
     const res = await postRequest<any>(
-      '/build',
+      "/build",
       {
         title: buildName,
         description: buildDescription,
-        skillId: '00000000-0000-0000-0000-000000000012',
-        tagIds: ['0d29edd8-9fcc-4398-9270-052246250b34'],
+        skillId: "00000000-0000-0000-0000-000000000012",
+        tagIds: [
+          "10000000-0000-0000-0000-000000000000",
+          "40000000-0000-0000-0000-000000000000",
+        ],
         classId: baseClassSelection?.id,
         ascendancyId: ascendancyClassSelection?.id,
       },
-      true
+      true,
     );
 
-    console.log('response after initial build creation:', res);
+    console.log("response after initial build creation:", res);
 
     if (isErrorResponse(res)) {
       // TODO: update popup styling
@@ -77,27 +71,14 @@ function CreateBuildsPage() {
       return;
     }
 
-    router.push('/profile/builds/edit');
+    router.push("/profile/builds/edit");
   };
 
   const ascendancyChoices = baseClassSelection
     ? getAscendancyChoice(baseClassSelection, ascendancies)
     : [];
 
-  console.log('ascendancyChoices:', ascendancyChoices);
-  useEffect(() => {
-    const getTags = async () => {
-      const tags = await getRequest<any>('/tag');
-
-      console.log('tags', tags);
-      if (tags?.statusCode === 200) {
-        setTags(tags.result);
-      }
-    };
-    getTags();
-  }, []);
-
-  console.log('@SubmitInfo ', {
+  console.log("@SubmitInfo ", {
     ascendancyClassSelection,
     baseClassSelection,
     buildDescription,
@@ -111,15 +92,6 @@ function CreateBuildsPage() {
           <>
             <HeaderTwo>Step I - Choose a build name.</HeaderTwo>
             <div className="mt-5">
-              Something as simple as{' '}
-              <span className="text-customSecondary">
-                &quot;Cyclone Warrior&quot;
-              </span>{' '}
-              or{' '}
-              <span className="text-customSecondary">
-                &quot;Boss Farmer&quot;
-              </span>{' '}
-              would do. Be creative!
               <div className="flex h-[400px] justify-center items-center">
                 <PrimaryInput
                   placeHolder="Name Your Build"
@@ -173,10 +145,10 @@ function CreateBuildsPage() {
                 <div
                   key={currentClass.id}
                   className={
-                    'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
+                    "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
                     (baseClassSelection === currentClass
-                      ? ' text-customSecondary'
-                      : '')
+                      ? " text-customSecondary"
+                      : "")
                   }
                   onClick={() => setBaseClass(currentClass)}
                 >
@@ -188,8 +160,8 @@ function CreateBuildsPage() {
             <div className="text-xl text-customHeaderTwo mt-6">Ascendancy</div>
 
             <div className="mt-6 text-center">
-              Which{' '}
-              <span className="text-customSecondary"> Ascendancy Class </span>{' '}
+              Which{" "}
+              <span className="text-customSecondary"> Ascendancy Class </span>{" "}
               is your Build for?
             </div>
             <div className="flex gap-4 mt-6">
@@ -197,10 +169,10 @@ function CreateBuildsPage() {
                 <div
                   key={ascendancyChoice.id}
                   className={
-                    'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
+                    "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
                     (ascendancyChoice.name === ascendancyClassSelection?.name
-                      ? ' text-customSecondary'
-                      : '')
+                      ? " text-customSecondary"
+                      : "")
                   }
                   onClick={() => setAscendancyClass(ascendancyChoice)}
                 >
@@ -217,14 +189,14 @@ function CreateBuildsPage() {
             </div>
             <div className="flex gap-4 mt-6">
               {tags &&
-                tags.map((tag: Record<string, string>) => (
+                tags.map((tag) => (
                   <div
                     key={tag.id}
                     className={
-                      'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
-                      (tagSelection === tag.id ? ' text-customSecondary' : '')
+                      "duration-200 ease-in hover:text-customSecondary cursor-pointer" +
+                      (tagSelection === tag.id ? " text-customSecondary" : "")
                     }
-                    onClick={() => setTag(tag.id)}
+                    onClick={() => { }}
                   >
                     {tag.name}
                   </div>
@@ -246,7 +218,7 @@ function CreateBuildsPage() {
             <div className="mt-6">
               Describe what your amazing build does in a short sentence.
             </div>
-            <Button onClick={() => {}} width={200} text="Create Item" />
+            <Button onClick={() => { }} width={200} text="Create Item" />
             <div className="flex mt-[20px] gap-[20px] flex-wrap">
               <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
                 Helmet
@@ -314,10 +286,10 @@ function CreateBuildsPage() {
     }
   };
 
-  console.log('step:', step);
-  console.log('buildName:', buildName);
-  console.log('buildDescription:', buildDescription);
-  console.log('baseClassSelection:', baseClassSelection);
+  console.log("step:", step);
+  console.log("buildName:", buildName);
+  console.log("buildDescription:", buildDescription);
+  console.log("baseClassSelection:", baseClassSelection);
 
   return (
     <div>
