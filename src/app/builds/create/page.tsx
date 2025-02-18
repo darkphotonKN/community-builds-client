@@ -1,6 +1,7 @@
 "use client";
 import Button from "@/components/Button";
 import PrimaryInput from "@/components/Input/PrimaryInput";
+import HeaderOne from "@/components/Layout/Text/HeaderOne";
 import HeaderTwo from "@/components/Layout/Text/HeaderTwo";
 import { isErrorResponse, postRequest } from "@/lib/api/requestHelpers";
 import { getAscendancyChoice } from "@/lib/utils/class";
@@ -86,7 +87,7 @@ function CreateBuildsPage() {
       case 1: {
         return (
           <>
-            <HeaderTwo>Step I - Choose a build name.</HeaderTwo>
+            <HeaderOne>Step I - Choose a build name.</HeaderOne>
             <div className="mt-5">
               <div className="flex h-[400px] justify-center items-center">
                 <PrimaryInput
@@ -116,7 +117,7 @@ function CreateBuildsPage() {
       case 2: {
         return (
           <>
-            <HeaderTwo>Step II - Class and Description </HeaderTwo>
+            <HeaderOne>Step II - Class and Description </HeaderOne>
             <HeaderTwo>Description</HeaderTwo>
 
             <div className="mt-6">
@@ -177,11 +178,33 @@ function CreateBuildsPage() {
               ))}
             </div>
 
+            <div className="text-xl text-customHeaderTwo mt-6">Main Skill</div>
+
+            <div className="mt-6 text-center">
+              Whats the{" "}
+              <span className="text-customSecondary"> Core Skill</span> of your
+              Build?
+            </div>
+
+            <div className="mt-3 text-sm text-center text-customHeaderOne">
+              This will be used for{" "}
+              <span className="text-customSecondary">advertising </span> your
+              build.
+            </div>
+            <div className="flex gap-4 mt-6">Skills Selection here</div>
+
             <div className="text-xl text-customHeaderTwo mt-6">Tag</div>
 
             <div className="mt-6 text-center">
               Which <span className="text-customSecondary"> Tags </span> should
               your Build have?
+            </div>
+
+            <div className="mt-3 text-sm text-center text-customHeaderOne">
+              These will be used to{" "}
+              <span className="text-customSecondary">categorize </span>
+              your build and make it appear in the correct{" "}
+              <span className="text-customSecondary">filter options</span>.
             </div>
             <div className="flex gap-4 mt-6">
               {tags &&
@@ -210,7 +233,7 @@ function CreateBuildsPage() {
       case 3: {
         return (
           <>
-            <HeaderTwo>Step III - Create Build</HeaderTwo>
+            <HeaderOne>Step III - Create Build</HeaderOne>
             <div className="mt-6">
               Describe what your amazing build does in a short sentence.
             </div>
@@ -264,7 +287,7 @@ function CreateBuildsPage() {
       case 4: {
         return (
           <>
-            <HeaderTwo>Step IIII - Create Build Or Create Item</HeaderTwo>
+            <HeaderOne>Step IV - Create Build Or Create Item</HeaderOne>
             <div className="mt-6">
               Describe what your amazing build does in a short sentence.
             </div>
