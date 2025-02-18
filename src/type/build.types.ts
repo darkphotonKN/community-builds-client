@@ -20,3 +20,8 @@ export type ClassAndAscendanciesResponse = {
 export type TagApiData = {
   name: string;
 } & BaseEntity;
+
+export type SkillApiData = {
+  name: string;
+  type: string;
+} & BaseEntity;
