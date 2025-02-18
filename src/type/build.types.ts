@@ -1,10 +1,22 @@
+import { BaseEntity } from "./api";
+
 export type CreateBuildResponse = {};
 
 export type ClassAscendancy = {
-	id: string;
-	created_at: string;
-	updated_at: string;
-	name: string;
-	description: string;
-	imageUrl: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+} & BaseEntity;
+
+export type Tag = {
+  name: string;
+} & BaseEntity;
+
+export type ClassAndAscendanciesResponse = {
+  classes: ClassAscendancy[];
+  ascendancies: ClassAscendancy[];
 };
+
+export type TagApiData = {
+  name: string;
+} & BaseEntity;
