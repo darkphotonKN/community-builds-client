@@ -198,6 +198,18 @@ function BuildEdit() {
         localStorage.setItem('buildItems', JSON.stringify(savedItems));
         return savedItems;
       });
+      if (toList) {
+        getMemberRareItems();
+      }
+    }
+  };
+
+  const getMemberRareItems = async () => {
+    const res = await getRequest<any>(`/item/member-rare-item`, null, {
+      auth: true,
+    });
+    if (res?.statusCode === 200) {
+      setMemberRareItems(res.result);
     }
   };
 
@@ -230,15 +242,6 @@ function BuildEdit() {
       }
     };
 
-    const getMemberRareItems = async () => {
-      const res = await getRequest<any>(`/item/member-rare-item`, null, {
-        auth: true,
-      });
-      if (res?.statusCode === 200) {
-        setMemberRareItems(res.result);
-      }
-    };
-
     getBaseItems();
     getItemMods();
     getMemberRareItems();
@@ -252,10 +255,11 @@ function BuildEdit() {
     }
   }, []);
 
-  const memberRareItemOptions = memberRareItems.map((item: any) => ({
-    key: item.id,
-    value: item.name || item.category,
-  }));
+  const memberRareItemOptions =
+    memberRareItems?.map((item: any) => ({
+      key: item.id,
+      value: item.name || item.category,
+    })) || [];
 
   return (
     <div>

@@ -7,63 +7,65 @@ import {
   AscendancyClassEnum,
   baseClass,
   BaseClass,
-} from "@/constants/enums";
-import { ClassAscendancy } from "@/type/build.types";
+} from '@/constants/enums';
+import { ClassAscendancy } from '@/type/build.types';
 
 export function getAscendancyChoice(
   classChoice: ClassAscendancy | undefined,
-  ascendancies: ClassAscendancy[] | undefined,
+  ascendancies: ClassAscendancy[] | undefined
 ): ClassAscendancy[] | undefined {
+  console.log('classChoice', classChoice);
+  console.log('ascendancies', ascendancies);
   if (!classChoice?.name || !ascendancies) return;
 
   const gemlingLegionnaire = ascendancies.find((ascendancy) => {
-    console.log("@AscendanciesSelection ascendancies check:", ascendancy);
+    console.log('@AscendanciesSelection ascendancies check:', ascendancy);
 
     return ascendancy.name === ascendancyClass.GemlingLegionnaire;
   });
 
   const witchHunter = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.Witchhunter,
+    (ascendancy) => ascendancy.name === ascendancyClass.Witchhunter
   );
 
   const titan = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.Titan,
+    (ascendancy) => ascendancy.name === ascendancyClass.Titan
   );
 
   const warbringer = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.Warbringer,
+    (ascendancy) => ascendancy.name === ascendancyClass.Warbringer
   );
 
   const infernalist = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.Infernalist,
+    (ascendancy) => ascendancy.name === ascendancyClass.Infernalist
   );
 
   const bloodMage = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.BloodMage,
+    (ascendancy) => ascendancy.name === ascendancyClass.BloodMage
   );
 
   const deadEye = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.Deadeye,
+    (ascendancy) => ascendancy.name === ascendancyClass.Deadeye
   );
 
   const pathFinder = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.Pathfinder,
+    (ascendancy) => ascendancy.name === ascendancyClass.Pathfinder
   );
 
   const invoker = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.Invoker,
+    (ascendancy) => ascendancy.name === ascendancyClass.Invoker
   );
 
   const acolyteOfChayula = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.AcolyteOfChayula,
+    (ascendancy) => ascendancy.name === ascendancyClass.AcolyteOfChayula
   );
 
   const stormWeaver = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.Stormweaver,
+    (ascendancy) => ascendancy.name === ascendancyClass.Stormweaver
   );
 
   const chronomancer = ascendancies.find(
-    (ascendancy) => ascendancy.name === ascendancyClass.Chronomancer,
+    (ascendancy) => ascendancy.name === ascendancyClass.Chronomancer
   );
 
   if (
@@ -82,8 +84,9 @@ export function getAscendancyChoice(
   )
     return;
 
-  console.log("@AscendanciesSelection classChoice:", classChoice);
+  console.log('@AscendanciesSelection classChoice:', classChoice);
 
+  console.log('classChoice.name', classChoice.name);
   switch (classChoice.name) {
     case baseClass.MERCENARY: {
       return [gemlingLegionnaire, witchHunter];

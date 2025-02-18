@@ -47,7 +47,7 @@ export const useBuildStore = create<BuildState>((set, get) => ({
     const classData = await getRequest<ClassAndAscendanciesResponse>("/class");
 
     const { classes, ascendancies } = classData?.result || {};
-
+    console.log('@ascendanciesggggggg',ascendancies)
     set({
       ascendancies,
     });
@@ -81,7 +81,7 @@ export const useBuildStore = create<BuildState>((set, get) => ({
     // also update ascendancy list to select the first one
     const ascendancies = state.ascendancies;
 
-    console.log("@AscendanciesSelection ascendancies state:", ascendancies);
+    console.log("@Ascendanciesggg", ascendancies);
 
     if (!ascendancies) return;
 
