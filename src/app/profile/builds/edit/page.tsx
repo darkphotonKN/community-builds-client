@@ -51,6 +51,8 @@ function BuildEdit() {
   >([]);
   console.log('itemModOptions', itemModOptions);
 
+  const [memberRareItems, setMemberRareItems] = useState([]);
+
   const [buildItems, setBuildItems] = useState<{ [key: string]: any }>(
     DEFAULT_BUILDS
   );
@@ -139,6 +141,23 @@ function BuildEdit() {
     });
   };
 
+  const handleMemberRareItem = (event: any) => {
+    // event.target.value
+    const targetItem: any = memberRareItems.find(
+      (item: any) => item.id === event.target.value
+    );
+    console.log('targetItem', targetItem);
+
+    setBuildItems((prev) => {
+      const savedItems = {
+        ...prev,
+        [itemCategory]: targetItem,
+      };
+      localStorage.setItem('buildItems', JSON.stringify(savedItems));
+      return savedItems;
+    });
+  };
+
   const handleSetRareItemMod = (event: any, index: number) => {
     // event.target.value
     const targetItem: any = itemMods.find(
@@ -163,13 +182,12 @@ function BuildEdit() {
   };
 
   const handleCreateRareItem = async (toList: boolean) => {
-    // setBuildItems(rareItems)
-    console.log('rareItems', rareItems);
     const payload = {
       baseItemId: rareItems.id,
-      states: rareItems.stats,
+      stats: rareItems.stats,
       ...(toList && { toList: true }),
     };
+    console.log('payload', payload);
     const res = await postRequest<any>(`/item/rare-item`, payload, true);
     if (res?.statusCode === 200) {
       setBuildItems((prev) => {
@@ -212,8 +230,18 @@ function BuildEdit() {
       }
     };
 
+    const getMemberRareItems = async () => {
+      const res = await getRequest<any>(`/item/member-rare-item`, null, {
+        auth: true,
+      });
+      if (res?.statusCode === 200) {
+        setMemberRareItems(res.result);
+      }
+    };
+
     getBaseItems();
     getItemMods();
+    getMemberRareItems();
   }, []);
 
   useEffect(() => {
@@ -223,6 +251,11 @@ function BuildEdit() {
       setBuildItems(parse);
     }
   }, []);
+
+  const memberRareItemOptions = memberRareItems.map((item: any) => ({
+    key: item.id,
+    value: item.name || item.category,
+  }));
 
   return (
     <div>
@@ -484,6 +517,20 @@ function BuildEdit() {
                     onChange={(e) => handleRareItem(e)}
                   >
                     {baseItemOptions?.map((item: any) => (
+                      <option key={item.key} value={item.key}>
+                        {item.value}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  Member Items <br />
+                  <select
+                    name="stats"
+                    id="stats"
+                    onChange={(e) => handleMemberRareItem(e)}
+                  >
+                    {memberRareItemOptions?.map((item: any) => (
                       <option key={item.key} value={item.key}>
                         {item.value}
                       </option>
