@@ -7,7 +7,7 @@ import { isErrorResponse, postRequest } from "@/lib/api/requestHelpers";
 import { getAscendancyChoice } from "@/lib/utils/class";
 import { useBuildStore } from "@/store/buildStore";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function CreateBuildsPage() {
   const router = useRouter();
