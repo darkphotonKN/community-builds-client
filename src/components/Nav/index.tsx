@@ -4,9 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import MainTitle from "@/components/MainTitle";
 import { NavType } from "@/constants/enums";
-import useIsAuthenticated from "@/hooks/useIsAuthenticated";
 import Button from "../Button";
-import { nav } from "framer-motion/client";
+import useIsAuthenticated from "@/hooks/useIsAuthenticated";
 
 function Nav() {
   const pathname = usePathname();

@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        customContentBg: "#313230", // primary content area bg color
+        customContentBg: "#36312F", // primary content area bg color
         customBg: "#151717", // primary bgh color
         customSecondary: "#B69792", // primary secondary color, mainly used for hover and as a combo color
         customHeaderOne: "#5A534E",

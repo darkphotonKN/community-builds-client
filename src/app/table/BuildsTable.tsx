@@ -1,3 +1,4 @@
+import Button from "@/components/Button";
 import { Build } from "@/type/build.types";
 
 function BuildsTable({ builds }: { builds?: Build[] }) {
@@ -29,38 +30,41 @@ function BuildsTable({ builds }: { builds?: Build[] }) {
     }
   };
 
+  const handlePublishBuild = () => { };
+
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-customContentBg">
+      <table className="min-w-full divide-y divide-gray-200 rounded-md">
+        <thead className="bg-customContentBg text-white-500">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
               Title
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
               Description
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
               Class
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
               Build Details
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
               Rating
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
               Status
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
               Views
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
               Created
             </th>
+            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider"></th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-customHeaderTwo divide-y divide-gray-200">
           {builds.map((build) => (
             <tr key={build.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap">
@@ -106,6 +110,14 @@ function BuildsTable({ builds }: { builds?: Build[] }) {
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {new Date(build.createdAt).toLocaleDateString()}
+              </td>
+
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <Button
+                  marginTop={0}
+                  text="Publish Build"
+                  onClick={handlePublishBuild}
+                />
               </td>
             </tr>
           ))}
