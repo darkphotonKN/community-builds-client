@@ -11,6 +11,18 @@ import {
 } from '@/lib/api/requestHelpers';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Editor from '@/components/Editor';
+
+const Tiptap = () => {
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: '<p>Hello World! 🌎️</p>',
+  });
+
+  return <EditorContent editor={editor} />;
+};
 
 const DEFAULT_BUILDS = {
   weapon: {},
@@ -660,6 +672,12 @@ function BuildEdit() {
             </div>
           )}
         </div>
+      </div>
+
+      <div>
+        <div>Editor</div>
+        {/* <Tiptap /> */}
+        <Editor />
       </div>
       <div className="flex justify-center gap-4">
         <Button onClick={handleClearBuildSet} width={200} text="Clear" />
