@@ -18,6 +18,7 @@ export async function getRequest<T, K extends Record<string, any> = any>(
     let headers = {};
     if (auth) {
       const token = getToken("access");
+      console.log("getting token for header:", token);
       headers = { ...headers, Authorization: `Bearer ${token}` };
     }
     const response = await axiosInstance.get<ApiResponse<T>>(endpoint, {
