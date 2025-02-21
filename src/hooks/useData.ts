@@ -25,6 +25,7 @@ export default function useData<ResT, DepT>(
   }, [...(dependencies ?? [])]);
 
   async function getData() {
+    console.log("incoming auth:", auth);
     const res = await getRequest<ResT>(endpoint, null, { auth });
 
     if (!res) return;

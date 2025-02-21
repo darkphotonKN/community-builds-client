@@ -3,7 +3,6 @@ import Button from '@/components/Button';
 import ItemInfoCard from '@/components/Card/ItemInfoCard';
 import HeaderOne from '@/components/Layout/Text/HeaderOne';
 import HeaderThree from '@/components/Layout/Text/HeaderThree';
-import HeaderTwo from '@/components/Layout/Text/HeaderTwo';
 import {
   getRequest,
   patchRequest,
@@ -194,6 +193,8 @@ function BuildEdit() {
   };
 
   const handleCreateRareItem = async (toList: boolean) => {
+    // setBuildItems(rareItems)
+    console.log('rareItems', rareItems);
     const payload = {
       baseItemId: rareItems.id,
       stats: rareItems.stats,

@@ -3,6 +3,7 @@ import { getAscendancyChoice } from "@/lib/utils/class";
 import {
   ClassAndAscendanciesResponse,
   ClassAscendancy,
+  SkillApiData,
   TagApiData,
 } from "@/type/build.types";
 import { create } from "zustand";
@@ -17,6 +18,7 @@ type BuildState = {
   ascendancies: ClassAscendancy[];
   tags: TagApiData[] | null;
   tagSelection: string | null;
+  skills: SkillApiData[] | null;
 
   setStep: (step: number) => void;
   setBuildName: (name: string) => void;
@@ -25,6 +27,7 @@ type BuildState = {
   setAscendancyClass: (ascendancySelection: ClassAscendancy) => void;
   setTagSelection: (tagSelection: string) => void;
   setTags: (tags: TagApiData[]) => void;
+  setSkills: (skills: SkillApiData[]) => void;
   initializeBuildData: () => void;
 };
 
@@ -39,6 +42,7 @@ export const useBuildStore = create<BuildState>((set, get) => ({
   ascendancyClassSelection: null,
   tagSelection: null,
   tags: [],
+  skills: [],
 
   // methods
 
@@ -74,6 +78,7 @@ export const useBuildStore = create<BuildState>((set, get) => ({
   setBuildDescription: (description) => set({ buildDescription: description }),
   setTagSelection: (tagSelection: string) => set({ tagSelection }),
   setTags: (tags: TagApiData[]) => set({ tags }),
+  setSkills: (skills: SkillApiData[]) => set({ skills }),
   setBaseClass: (baseClassSelection) => {
     const state = get();
     set({ baseClassSelection });

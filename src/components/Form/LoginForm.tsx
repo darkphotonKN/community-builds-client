@@ -7,6 +7,7 @@ import Button from "../Button";
 import { ApiResponse, ErrorResponse } from "@/type/api";
 import { SignInResponse } from "@/type/member.types";
 import HeaderTwo from "../Layout/Text/HeaderTwo";
+import { useRouter } from "next/navigation";
 
 type Values = {
   password: string;
@@ -14,6 +15,7 @@ type Values = {
 };
 
 function LoginForm() {
+  const router = useRouter();
   const [res, setRes] = useState<ApiResponse<SignInResponse> | null>();
 
   const SignupSchema = Yup.object().shape({
@@ -79,6 +81,7 @@ function LoginForm() {
         }
 
         setRes(res);
+        router.push("/");
       }}
     >
       {({ errors, touched }) => (
