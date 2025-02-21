@@ -1,12 +1,21 @@
-import { SkillApiData } from "@/type/build.types";
 import { useState } from "react";
 
-type SkillSelectorProps = {
-	onSelect: (skill: SkillApiData) => void;
-	selected?: SkillApiData;
+type SearchableItem = {
+	id: string;
+	name: string;
 };
 
-function SearchDropDown({ onSelect, selected }: SkillSelectorProps) {
+type SearchDropDownProps<TData extends SearchableItem> = {
+	onSelect: (skill: TData) => void;
+	selected?: TData;
+	data?: TData[];
+};
+
+function SearchDropDown<TData extends SearchableItem>({
+	onSelect,
+	selected,
+	data,
+}: SearchDropDownProps<TData>) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
 
@@ -53,16 +62,16 @@ function SearchDropDown({ onSelect, selected }: SkillSelectorProps) {
 
 					{/* Skills list */}
 					<div className="max-h-64 overflow-y-auto">
-						{filteredSkills.length === 0 ? (
+						{data?.length === 0 ? (
 							<div className="p-4 text-center text-gray-500">
 								No skills found
 							</div>
 						) : (
-							filteredSkills.map((skill) => (
+							data?.map((item) => (
 								<button
-									key={skill.id}
+									key={item.id}
 									onClick={() => {
-										onSelect(skill);
+										onSelect(item);
 										setIsOpen(false);
 										setSearchTerm("");
 									}}
@@ -71,10 +80,7 @@ function SearchDropDown({ onSelect, selected }: SkillSelectorProps) {
 								>
 									{/* TODO: Add icon here */}
 									<div>
-										<div className="font-medium">{skill.name}</div>
-										<div className="text-xs text-gray-500">
-											{skill.category} • {skill.type}
-										</div>
+										<div className="font-medium">{item.name}</div>
 									</div>
 								</button>
 							))

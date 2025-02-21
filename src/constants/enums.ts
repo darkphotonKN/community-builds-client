@@ -1,6 +1,6 @@
 /**
-Build Enums
-**/
+ * Build Enums
+ **/
 export const baseClass = {
   WARRIOR: "Warrior",
   SORCEROR: "Sorceror",
@@ -28,3 +28,13 @@ export const ascendancyClass = {
 
 export type AscendancyClassEnum =
   (typeof ascendancyClass)[keyof typeof ascendancyClass];
+
+/**
+ * Layout Enums
+ **/
+export const NavType = {
+  standard: "STANDARD",
+  authenticated: "AUTHENTICATED",
+  notAuthenticated: "NOT_AUTHENTICATED",
+} as const;
+export type NavTypeEnum = (typeof NavType)[keyof typeof NavType];
