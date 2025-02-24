@@ -318,38 +318,6 @@ const HoverExtension = Extension.create({
   },
 });
 
-// const InsertGameDataContentExtension = Extension.create({
-//   name: 'insertGameDataContent',
-
-//   addCommands() {
-//     return {
-//       insertBlueGem:
-//         () =>
-//         ({ commands }: any) => {
-//           return commands.insertContent(
-//             '<span><img src="/Blue-Gem.png" />Blue Gem</span>'
-//           );
-//         },
-//     };
-//   },
-
-//   addProseMirrorPlugins() {
-//     return [
-//       new Plugin({
-//         key: new PluginKey('insertBlueGemPlugin'),
-//         props: {
-//           handleDOMEvents: {
-//             mouseover: (view, event) => {
-//               // 這裡可以處理與 DOM 交互的邏輯（例如顯示選單）
-//               console.log('Hovered over an item');
-//             },
-//           },
-//         },
-//       }),
-//     ];
-//   },
-// });
-
 const ImageTextSpan = Node.create({
   name: 'span',
   group: 'inline',
@@ -380,7 +348,7 @@ const ImageTextSpan = Node.create({
         getAttrs: (element: any) => {
           // const img = element.querySelector('img');
           return {
-            class: 'game-item',
+            class: 'game-item-group',
             // src: img?.getAttribute('src') || null,
             // alt: img?.getAttribute('alt') || null,
           };
@@ -396,8 +364,7 @@ const ImageTextSpan = Node.create({
     return [
       'span',
       attrs,
-      0,
-      // ['span', {}, 0], // 增加一個內部 span 來包含文字內容
+      ['span', { class: 'game-item' }, 0], // 增加一個內部 span 來包含文字內容
     ];
   },
 
@@ -414,6 +381,7 @@ const ImageTextSpan = Node.create({
     } as Partial<RawCommands>;
   },
 });
+
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
   // TextStyle.configure({ types: [ListItem.name] }),

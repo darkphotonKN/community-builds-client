@@ -95,19 +95,25 @@
   height: 200px;
 }
  
+.game-item-group {
+  margin: 0 10px;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
 .game-item {
   margin: 0 4px;
   display: inline-flex;
   gap: 4px;
   color: yellow;
-  vertical-align: middle;
 }
-.game-item:focus {
-  background-color: #f0f0f0;
-  opacity: 0.3;
-  border-radius: 4px;
-}
+
 .game-item img {
   width: 20px;
   height: 20px;
+}
+
+.game-item-group.ProseMirror-selectednode {
+  background-color: #533636;
+  border-radius: 4px;
 }
