@@ -4,7 +4,7 @@ import ListItem from '@tiptap/extension-list-item';
 import TextStyle from '@tiptap/extension-text-style';
 import { EditorProvider, useCurrentEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Editor,
   Extension,
@@ -15,16 +15,17 @@ import {
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { DOMParser } from '@tiptap/pm/model';
 import Image from '@tiptap/extension-image';
+import { getRequest } from '@/lib/api/requestHelpers';
 
 const MenuBar = () => {
   const { editor } = useCurrentEditor();
   // console.log('editor', editor?.getHTML());
-  if (!editor) {
-    return null;
-  }
+  // if (!editor) {
+  //   return null;
+  // }
 
   const setLink = useCallback(() => {
-    const previousUrl = editor.getAttributes('link').href;
+    const previousUrl = editor?.getAttributes('link').href;
     const url = window.prompt('URL', previousUrl);
 
     // cancelled
@@ -34,7 +35,7 @@ const MenuBar = () => {
 
     // empty
     if (url === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+      editor?.chain().focus().extendMarkRange('link').unsetLink().run();
 
       return;
     }
@@ -42,7 +43,7 @@ const MenuBar = () => {
     // update link
     try {
       editor
-        .chain()
+        ?.chain()
         .focus()
         .extendMarkRange('link')
         .setLink({ href: url })
@@ -56,13 +57,9 @@ const MenuBar = () => {
     const url = window.prompt('URL');
 
     if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+      editor?.chain().focus().setImage({ src: url }).run();
     }
   }, [editor]);
-
-  if (!editor) {
-    return null;
-  }
 
   function elementFromString(value: string) {
     const element = document.createElement('div');
@@ -85,6 +82,40 @@ const MenuBar = () => {
     editor?.commands.insertContentAt(selection.anchor, value);
   }
 
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
+  const [allData, setAllData] = useState([]);
+  const handleOpenDataPanel = () => {
+    setIsPanelOpen(true);
+  };
+
+  const handleSelectData = (e: any) => {
+    const id = e.target.value;
+
+    const target: any = allData.find((item: any) => item.id === id);
+    console.log('target', target);
+    if (editor) {
+      insertHTML(
+        editor,
+        `<span><img src="${target.imageUrl}" alt="tt" />${target.name}</span>`
+      );
+    }
+  };
+
+  useEffect(() => {
+    const getAllData = async () => {
+      const res = await getRequest<any>(`/item/all-data`, null, { auth: true });
+      if (res?.statusCode === 200) {
+        console.log('all data', res.result);
+        setAllData(res.result);
+      }
+    };
+
+    getAllData();
+  }, []);
+
+  if (!editor) {
+    return null;
+  }
   return (
     <div className="control-group">
       <div className="tiptap-button-group">
@@ -254,15 +285,17 @@ const MenuBar = () => {
         >
           Unset link
         </button>
-        <button
-          onClick={() =>
-            insertHTML(
-              editor,
-              '<span><img src="/aa.png" alt="tt" />Blue Gem</span>'
-            )
-          }
-        >
+        <button className="relative" onClick={handleOpenDataPanel}>
           Add Game Data
+          <div className={`absolute ${isPanelOpen ? 'block' : 'hidden'}`}>
+            <select name="" id="" onChange={handleSelectData}>
+              {allData.map((item: any) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </button>
         <button onClick={addImage}>Set image</button>
       </div>
@@ -482,38 +515,13 @@ const extensions = [
   // CustomNodeExtension.configure(),
 ];
 
-const content = `
-<h2>
-  Hi there,
-</h2>
-<p>
-  this is a <em>basic</em> example of <strong>Tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
-</ㄣ>
-<ul>
-  <li>
-    That’s a bullet list with one …
-  </li>
-  <li>
-    … or two list items.
-  </li>
-</ul>
-<p>
-  Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
-</p>
-<pre><code class="language-css">body {
-  display: none;
-}</code></pre>
-<p>
-  I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
-</p>
-<blockquote>
-  Wow, that’s amazing. Good work, boy! 👏
-  <br />
-  — Mom
-</blockquote>
-`;
+const content = ``;
 
-export default () => {
+const CustomEditor = ({
+  handleChangeEditor,
+}: {
+  handleChangeEditor: (content: string) => void;
+}) => {
   return (
     <EditorProvider
       slotBefore={<MenuBar />}
@@ -524,10 +532,12 @@ export default () => {
           style: 'min-height: 300px; border: 1px solid #ccc; padding: 10px;',
         },
       }}
-      // onUpdate={({ editor }) => {
-      //   console.log('編輯後的 HTML:', editor.getHTML());
-      //   console.log('編輯後的 JSON:', editor.getJSON());
-      // }}
+      onUpdate={({ editor }) => {
+        console.log('編輯後的 HTML:', editor.getHTML());
+        console.log('編輯後的 JSON:', editor.getJSON());
+        handleChangeEditor(editor.getHTML());
+      }}
     ></EditorProvider>
   );
 };
+export default CustomEditor;

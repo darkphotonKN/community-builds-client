@@ -62,6 +62,8 @@ function BuildEdit() {
   >([]);
   console.log('itemModOptions', itemModOptions);
 
+  const [editorContent, setEditorContent] = useState('');
+
   const [memberRareItems, setMemberRareItems] = useState([]);
 
   const [buildItems, setBuildItems] = useState<{ [key: string]: any }>(
@@ -268,12 +270,40 @@ function BuildEdit() {
     }
   }, []);
 
+  const createArticle = async () => {
+    const res = await postRequest<any>(
+      `/article`,
+      {
+        content: editorContent,
+      },
+      true
+    );
+    if (res?.statusCode === 200) {
+    }
+  };
+
+  useEffect(() => {
+    const getArticle = async () => {
+      const res = await getRequest<any>(`/article`, null, { auth: true });
+      if (res?.statusCode === 200) {
+        res.result;
+      }
+    };
+
+    getArticle();
+  }, []);
+
+  const handleChangeEditor = (value: string) => {
+    setEditorContent(value);
+  };
+
   const memberRareItemOptions =
     memberRareItems?.map((item: any) => ({
       key: item.id,
       value: item.name || item.category,
     })) || [];
 
+  console.log('editorContent', editorContent);
   return (
     <div>
       <div className="h-[850px]">
@@ -678,7 +708,7 @@ function BuildEdit() {
       <div>
         <div>Editor</div>
         {/* <Tiptap /> */}
-        <Editor />
+        <Editor handleChangeEditor={handleChangeEditor} />
       </div>
       <div className="flex justify-center gap-4">
         <Button onClick={handleClearBuildSet} width={200} text="Clear" />
@@ -687,6 +717,7 @@ function BuildEdit() {
           width={200}
           text="Create item Set"
         />
+        <Button onClick={createArticle} width={200} text="Create Content" />
       </div>
     </div>
   );
