@@ -14,8 +14,9 @@ import {
 } from '@tiptap/core';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { DOMParser } from '@tiptap/pm/model';
-import Image from '@tiptap/extension-image';
+import EditorImage from '@tiptap/extension-image';
 import { getRequest } from '@/lib/api/requestHelpers';
+import Image from 'next/image';
 
 const MenuBar = () => {
   const { editor } = useCurrentEditor();
@@ -88,8 +89,8 @@ const MenuBar = () => {
     setIsPanelOpen(true);
   };
 
-  const handleSelectData = (e: any) => {
-    const id = e.target.value;
+  const handleSelectData = (id: string) => {
+    if (!id) return;
 
     const target: any = allData.find((item: any) => item.id === id);
     console.log('target', target);
@@ -98,6 +99,7 @@ const MenuBar = () => {
         editor,
         `<span><img src="${target.imageUrl}" alt="tt" />${target.name}</span>`
       );
+      setIsPanelOpen(false);
     }
   };
 
@@ -116,6 +118,7 @@ const MenuBar = () => {
   if (!editor) {
     return null;
   }
+  console.log('isPanelOpen', isPanelOpen);
   return (
     <div className="control-group">
       <div className="tiptap-button-group">
@@ -285,18 +288,36 @@ const MenuBar = () => {
         >
           Unset link
         </button>
-        <button className="relative" onClick={handleOpenDataPanel}>
-          Add Game Data
-          <div className={`absolute ${isPanelOpen ? 'block' : 'hidden'}`}>
-            <select name="" id="" onChange={handleSelectData}>
+        <div className="inline-flex relative">
+          <button className="" onClick={handleOpenDataPanel}>
+            Add Game Data
+          </button>
+          <div
+            className={`absolute top-0 z-10 w-[300px] h-[300px] p-[20px] bg-[#000]  text-[#fff] overflow-scroll border border-customSecondary ${
+              isPanelOpen ? 'block' : 'hidden'
+            }`}
+          >
+            <div className="">
               {allData.map((item: any) => (
-                <option key={item.id} value={item.id}>
+                <div
+                  key={item.id}
+                  onClick={() => handleSelectData(item.id)}
+                  className="flex gap-4 items-center py-[4px] hover:bg-customSecondary"
+                >
+                  <Image
+                    src={item.imageUrl}
+                    alt="1"
+                    width="20"
+                    height="20"
+                    className="object-cover"
+                  />
                   {item.name}
-                </option>
+                </div>
               ))}
-            </select>
+            </div>
           </div>
-        </button>
+        </div>
+
         <button onClick={addImage}>Set image</button>
       </div>
     </div>
@@ -419,7 +440,7 @@ const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
   // TextStyle.configure({ types: [ListItem.name] }),
   TextStyle.configure(),
-  Image.configure({
+  EditorImage.configure({
     inline: true,
     allowBase64: true,
   }),

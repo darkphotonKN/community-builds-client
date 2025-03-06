@@ -71,7 +71,7 @@
 	 margin: 2rem 0;
 }
 
-.tiptap-button-group > button {
+.tiptap-button-group button {
   padding: 10px;
   border: 1px solid #ffffff;
   border-radius: 8px;
