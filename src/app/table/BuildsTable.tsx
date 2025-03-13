@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import { Build } from "@/type/build.types";
 
 function BuildsTable({ builds }: { builds?: Build[] }) {
-  // TOOD: add skeleton for loading
+  // TODO: add skeleton for loading
   if (!builds) return;
 
   const calculateAvgRating = (build: Build) => {
@@ -115,8 +115,10 @@ function BuildsTable({ builds }: { builds?: Build[] }) {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <Button
                   marginTop={0}
-                  text="Publish Build"
+                  text="Publish"
                   onClick={handlePublishBuild}
+                  width={90}
+                  height={35}
                 />
               </td>
             </tr>
