@@ -1,7 +1,11 @@
-import { TextProps } from "./HeaderOne";
+import { TextProps } from './HeaderOne';
 
 function HeaderThree({ children }: TextProps) {
-	return <div className="text-customHeaderThree text-xl mt-2">{children}</div>;
+  return (
+    <div className="text-customHeaderTwo text-lg font-medium mt-2">
+      {children}
+    </div>
+  );
 }
 
 export default HeaderThree;

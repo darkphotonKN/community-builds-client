@@ -1,4 +1,4 @@
-import { TextProps } from "./HeaderOne";
+import { TextProps } from './HeaderOne';
 
 function HeaderTwo({ children }: TextProps) {
   return (

@@ -51,7 +51,7 @@ export const useBuildStore = create<BuildState>((set, get) => ({
     const classData = await getRequest<ClassAndAscendanciesResponse>("/class");
 
     const { classes, ascendancies } = classData?.result || {};
-    console.log('@ascendanciesggggggg',ascendancies)
+    console.log("@ascendanciesggggggg", ascendancies);
     set({
       ascendancies,
     });

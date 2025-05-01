@@ -28,7 +28,7 @@ export default function RootLayout({
         {/* Core Application Wrapper  */}
         <div
           id="app"
-          className="bg-customBg text-customTxtContent p-5 h-[10000px]"
+          className="bg-customBg text-customTxtContent p-5 min-h-screen"
         >
           {/* TODO: Global Modal */}
           {/* <Modal /> */}
@@ -37,9 +37,9 @@ export default function RootLayout({
           <Nav />
 
           {/* Content Area */}
-          <div className="w-[100%] h-screen pt-4">
+          <div className="w-full min-h-[calc(100vh-4rem)] pt-4">
             <Header />
-            <div>{children}</div>
+            <main className="h-full">{children}</main>
           </div>
         </div>
       </body>
