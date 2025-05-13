@@ -117,112 +117,125 @@ function CreateBuildsPage() {
       case 2: {
         return (
           <>
-            <HeaderOne>Step II - Class and Description </HeaderOne>
-            <HeaderTwo>Description</HeaderTwo>
+            <HeaderOne>Step II - Class and Description</HeaderOne>
 
-            <div className="mt-6">
-              Describe what your build does in a short sentence.
-            </div>
-            <div className="justify-center mt-6">
-              <PrimaryInput
-                placeHolder="Enter description"
-                handleChangeFn={handleBuildDescription}
-                value={buildDescription}
-                validation={{ length: 10 }}
-              />
-            </div>
-
-            <div className="text-xl text-customHeaderTwo mt-6">Class</div>
-            <div className="mt-6 text-center">
-              Which <span className="text-customSecondary"> Class </span> is
-              your Build for?
-            </div>
-            <div className="flex gap-4 mt-6">
-              {classes.map((currentClass) => (
-                <div
-                  key={currentClass.id}
-                  className={
-                    'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
-                    (baseClassSelection === currentClass
-                      ? ' text-customSecondary'
-                      : '')
-                  }
-                  onClick={() => setBaseClass(currentClass)}
-                >
-                  {currentClass.name}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+              {/* Description Section */}
+              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
+                <HeaderTwo>Description</HeaderTwo>
+                <div className="mt-4 text-customTxtContent">
+                  Describe what your build does in a short sentence.
                 </div>
-              ))}
-            </div>
-
-            <div className="text-xl text-customHeaderTwo mt-6">Ascendancy</div>
-
-            <div className="mt-6 text-center">
-              Which{' '}
-              <span className="text-customSecondary"> Ascendancy Class </span>{' '}
-              is your Build for?
-            </div>
-            <div className="flex gap-4 mt-6">
-              {ascendancyChoices?.map((ascendancyChoice) => (
-                <div
-                  key={ascendancyChoice.id}
-                  className={
-                    'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
-                    (ascendancyChoice.name === ascendancyClassSelection?.name
-                      ? ' text-customSecondary'
-                      : '')
-                  }
-                  onClick={() => setAscendancyClass(ascendancyChoice)}
-                >
-                  {ascendancyChoice.name}
+                <div className="mt-4">
+                  <PrimaryInput
+                    placeHolder="Enter description"
+                    handleChangeFn={handleBuildDescription}
+                    value={buildDescription}
+                    validation={{ length: 10 }}
+                  />
                 </div>
-              ))}
+              </div>
+
+              {/* Class Section */}
+              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
+                <HeaderTwo>Class</HeaderTwo>
+                <div className="mt-4 text-customTxtContent text-center">
+                  Which <span className="text-customSecondary">Class</span> is
+                  your Build for?
+                </div>
+                <div className="flex flex-wrap gap-4 mt-4 justify-center">
+                  {classes.map((currentClass) => (
+                    <div
+                      key={currentClass.id}
+                      className={`px-4 py-2 rounded-md duration-200 ease-in hover:bg-customSecondary hover:text-customBg cursor-pointer ${
+                        baseClassSelection === currentClass
+                          ? 'bg-customSecondary text-customBg'
+                          : 'text-customTxtContent'
+                      }`}
+                      onClick={() => setBaseClass(currentClass)}
+                    >
+                      {currentClass.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Ascendancy Section */}
+              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
+                <HeaderTwo>Ascendancy</HeaderTwo>
+                <div className="mt-4 text-customTxtContent text-center">
+                  Which{' '}
+                  <span className="text-customSecondary">Ascendancy Class</span>{' '}
+                  is your Build for?
+                </div>
+                <div className="flex flex-wrap gap-4 mt-4 justify-center">
+                  {ascendancyChoices?.map((ascendancyChoice) => (
+                    <div
+                      key={ascendancyChoice.id}
+                      className={`px-4 py-2 rounded-md duration-200 ease-in hover:bg-customSecondary hover:text-customBg cursor-pointer ${
+                        ascendancyChoice.name === ascendancyClassSelection?.name
+                          ? 'bg-customSecondary text-customBg'
+                          : 'text-customTxtContent'
+                      }`}
+                      onClick={() => setAscendancyClass(ascendancyChoice)}
+                    >
+                      {ascendancyChoice.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Main Skill Section */}
+              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
+                <HeaderTwo>Main Skill</HeaderTwo>
+                <div className="mt-4 text-customTxtContent text-center">
+                  What's the{' '}
+                  <span className="text-customSecondary">Core Skill</span> of
+                  your Build?
+                </div>
+                <div className="mt-2 text-sm text-center text-customHeaderOne">
+                  This will be used for{' '}
+                  <span className="text-customSecondary">advertising</span> your
+                  build.
+                </div>
+                <div className="flex flex-wrap gap-4 mt-4 justify-center">
+                  Skills Selection here
+                </div>
+              </div>
+
+              {/* Tags Section */}
+              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all md:col-span-2">
+                <HeaderTwo>Tags</HeaderTwo>
+                <div className="mt-4 text-customTxtContent text-center">
+                  Which <span className="text-customSecondary">Tags</span>{' '}
+                  should your Build have?
+                </div>
+                <div className="mt-2 text-sm text-center text-customHeaderOne">
+                  These will be used to{' '}
+                  <span className="text-customSecondary">categorize</span> your
+                  build and make it appear in the correct{' '}
+                  <span className="text-customSecondary">filter options</span>.
+                </div>
+                <div className="flex flex-wrap gap-4 mt-4 justify-center">
+                  {tags &&
+                    tags.map((tag) => (
+                      <div
+                        key={tag.id}
+                        className={`px-4 py-2 rounded-md duration-200 ease-in hover:bg-customSecondary hover:text-customBg cursor-pointer ${
+                          tagSelection === tag.id
+                            ? 'bg-customSecondary text-customBg'
+                            : 'text-customTxtContent'
+                        }`}
+                        onClick={() => setTagSelection(tag.id)}
+                      >
+                        {tag.name}
+                      </div>
+                    ))}
+                </div>
+              </div>
             </div>
 
-            <div className="text-xl text-customHeaderTwo mt-6">Main Skill</div>
-
-            <div className="mt-6 text-center">
-              Whats the{' '}
-              <span className="text-customSecondary"> Core Skill</span> of your
-              Build?
-            </div>
-
-            <div className="mt-3 text-sm text-center text-customHeaderOne">
-              This will be used for{' '}
-              <span className="text-customSecondary">advertising </span> your
-              build.
-            </div>
-            <div className="flex gap-4 mt-6">Skills Selection here</div>
-
-            <div className="text-xl text-customHeaderTwo mt-6">Tag</div>
-
-            <div className="mt-6 text-center">
-              Which <span className="text-customSecondary"> Tags </span> should
-              your Build have?
-            </div>
-
-            <div className="mt-3 text-sm text-center text-customHeaderOne">
-              These will be used to{' '}
-              <span className="text-customSecondary">categorize </span>
-              your build and make it appear in the correct{' '}
-              <span className="text-customSecondary">filter options</span>.
-            </div>
-            <div className="flex gap-4 mt-6">
-              {tags &&
-                tags.map((tag) => (
-                  <div
-                    key={tag.id}
-                    className={
-                      'duration-200 ease-in hover:text-customSecondary cursor-pointer' +
-                      (tagSelection === tag.id ? ' text-customSecondary' : '')
-                    }
-                    onClick={() => setTagSelection(tag.id)}
-                  >
-                    {tag.name}
-                  </div>
-                ))}
-            </div>
-            <div className="flex h-[300px] justify-center items-center"></div>
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-8">
               {buildName.length >= 6 && (
                 <Button onClick={handleCreateBuild} width={200} text="NEXT" />
               )}
