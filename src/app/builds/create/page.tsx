@@ -123,16 +123,34 @@ function CreateBuildsPage() {
               {/* Description Section */}
               <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
                 <HeaderTwo>Description</HeaderTwo>
-                <div className="mt-4 text-customTxtContent">
+                <div className="mt-4 text-customTxtContent text-center">
                   Describe what your build does in a short sentence.
                 </div>
-                <div className="mt-4">
+                <div className="mt-4 flex justify-center">
                   <PrimaryInput
                     placeHolder="Enter description"
                     handleChangeFn={handleBuildDescription}
                     value={buildDescription}
                     validation={{ length: 10 }}
                   />
+                </div>
+              </div>
+
+              {/* Main Skill Section */}
+              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
+                <HeaderTwo>Main Skill</HeaderTwo>
+                <div className="mt-4 text-customTxtContent text-center">
+                  What&apos;s the{' '}
+                  <span className="text-customSecondary">Core Skill</span> of
+                  your Build?
+                </div>
+                <div className="mt-2 text-sm text-center text-customHeaderOne">
+                  This will be used for{' '}
+                  <span className="text-customSecondary">advertising</span> your
+                  build.
+                </div>
+                <div className="flex flex-wrap gap-4 mt-4 justify-center">
+                  Skills Selection here
                 </div>
               </div>
 
@@ -182,24 +200,6 @@ function CreateBuildsPage() {
                       {ascendancyChoice.name}
                     </div>
                   ))}
-                </div>
-              </div>
-
-              {/* Main Skill Section */}
-              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
-                <HeaderTwo>Main Skill</HeaderTwo>
-                <div className="mt-4 text-customTxtContent text-center">
-                  What's the{' '}
-                  <span className="text-customSecondary">Core Skill</span> of
-                  your Build?
-                </div>
-                <div className="mt-2 text-sm text-center text-customHeaderOne">
-                  This will be used for{' '}
-                  <span className="text-customSecondary">advertising</span> your
-                  build.
-                </div>
-                <div className="flex flex-wrap gap-4 mt-4 justify-center">
-                  Skills Selection here
                 </div>
               </div>
 
@@ -283,17 +283,6 @@ function CreateBuildsPage() {
                 Ring
               </div>
             </div>
-            <div className="flex mt-[20px] gap-[20px]">
-              {/* <button
-                onClick={() => handleNextStep(4)}
-                className="flex-1 text-center cursor-pointer border border-customSecondary rounded-lg p-[40px] hover:bg-customSecondary"
-              >
-                Create Build
-              </button> */}
-              {/* <div className="flex-1 text-center cursor-pointer border border-customSecondary rounded-lg p-[40px] hover:bg-customSecondary">
-                Create Item
-              </div> */}
-            </div>
           </>
         );
       }
@@ -308,22 +297,12 @@ function CreateBuildsPage() {
               <div className="flex-1 text-center cursor-pointer border border-customSecondary rounded-lg p-[40px] hover:bg-customSecondary">
                 Create Build
               </div>
-              {/* <div className="flex-1 text-center cursor-pointer border border-customSecondary rounded-lg p-[40px] hover:bg-customSecondary">
-                Create Item
-              </div> */}
             </div>
           </>
         );
       }
     }
   };
-
-  console.log('step:', step);
-  console.log('buildName:', buildName);
-  console.log('buildDescription:', buildDescription);
-  console.log('baseClassSelection:', baseClassSelection);
-
-  console.log({ tags });
 
   return (
     <div>
@@ -333,11 +312,11 @@ function CreateBuildsPage() {
       </div>
       <div className="flex justify-center">
         <div className="flex flex-col items-center">
-          {/* Render Current Build Create Step UI */}
           <div>{renderStep()}</div>
         </div>
       </div>
     </div>
   );
 }
+
 export default CreateBuildsPage;
