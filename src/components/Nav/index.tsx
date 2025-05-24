@@ -65,11 +65,11 @@ function Nav() {
                     {navItem.name === 'Create Build' ? (
                       <div className="relative group">
                         <div
-                          className="py-3 px-6 rounded-md bg-customBg border border-customSecondary text-customHeaderTwo 
+                          className="py-2 px-4 rounded-md bg-customContentBg border border-customSecondary text-customHeaderTwo 
                           transition-all duration-200 ease-in hover:bg-customSecondary hover:text-customBg
                           shadow-customBlockShadow hover:shadow-customBlockShadowHover"
                         >
-                          <div className="text-lg font-medium">
+                          <div className="text-sm font-medium">
                             {navItem.name}
                           </div>
                         </div>
