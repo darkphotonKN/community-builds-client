@@ -1,13 +1,13 @@
-"use client";
-import { isErrorResponse, postRequest } from "@/lib/api/requestHelpers";
-import { Field, Form, Formik, FormikHelpers } from "formik";
-import { useEffect, useState } from "react";
-import * as Yup from "yup";
-import Button from "../Button";
-import { ApiResponse, ErrorResponse } from "@/type/api";
-import { SignInResponse } from "@/type/member.types";
-import HeaderTwo from "../Layout/Text/HeaderTwo";
-import { useRouter } from "next/navigation";
+'use client';
+import { isErrorResponse, postRequest } from '@/lib/api/requestHelpers';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { useEffect, useState } from 'react';
+import * as Yup from 'yup';
+import Button from '../Button';
+import { ApiResponse, ErrorResponse } from '@/type/api';
+import { SignInResponse } from '@/type/member.types';
+import HeaderTwo from '../Layout/Text/HeaderTwo';
+import { useRouter } from 'next/navigation';
 
 type Values = {
   password: string;
@@ -20,23 +20,23 @@ function LoginForm() {
 
   const SignupSchema = Yup.object().shape({
     email: Yup.string()
-      .email("Invalid email")
-      .required("The email field is required."),
+      .email('Invalid email')
+      .required('The email field is required.'),
     password: Yup.string()
-      .min(6, "Password needs to be longer.")
-      .required("The password field is required."),
+      .min(6, 'Password needs to be longer.')
+      .required('The password field is required.'),
   });
 
   useEffect(() => {
     if (res?.statusCode === 200) {
       // store access token then re-direct
       if (isErrorResponse(res)) return;
-      localStorage.setItem("access", res.result.accessToken);
+      localStorage.setItem('access', res.result.accessToken);
     }
   }, [res]);
 
   const renderResults = (
-    res: ApiResponse<SignInResponse> | null | undefined,
+    res: ApiResponse<SignInResponse> | null | undefined
   ) => {
     /* handle error case first for narrowing */
     if (isErrorResponse(res)) {
@@ -61,68 +61,84 @@ function LoginForm() {
   return (
     <Formik
       initialValues={{
-        email: "",
-        password: "",
+        email: '',
+        password: '',
       }}
       validationSchema={SignupSchema}
       onSubmit={async (
         values: Values,
-        { setSubmitting }: FormikHelpers<Values>,
+        { setSubmitting }: FormikHelpers<Values>
       ) => {
-        const res = await postRequest<SignInResponse>("/member/signin", values);
+        const res = await postRequest<SignInResponse>('/member/signin', values);
 
-        console.log("signin res:", res);
+        console.log('signin res:', res);
 
         if (isErrorResponse(res)) {
-          console.log("Error", res.message);
+          console.log('Error', res.message);
           setRes(res);
 
           return;
         }
 
         setRes(res);
-        router.push("/");
+        router.push('/');
       }}
     >
       {({ errors, touched }) => (
-        <Form className="flex flex-col justify-center">
-          <HeaderTwo>Login</HeaderTwo>
+        <Form className="flex flex-col justify-center w-[400px] p-8 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
+          <div className="text-center mb-8">
+            <HeaderTwo>Welcome Back, Exile</HeaderTwo>
+          </div>
 
-          <label htmlFor="email" className="my-2">
-            Email
-          </label>
-          <Field
-            className="border border-black px-2 py-1 rounded"
-            id="email"
-            name="email"
-            placeholder="Enter Email"
-            type="email"
-          />
+          <div className="space-y-6">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-customTxtContent mb-2 text-sm"
+              >
+                Email
+              </label>
+              <Field
+                className="w-full bg-customBg border border-customSecondary text-customTxtContent rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-customSecondary focus:border-transparent transition-all"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                type="email"
+              />
+              {errors.email && touched.email ? (
+                <div className="mt-2 text-red-600 text-sm">{errors.email}</div>
+              ) : null}
+            </div>
 
-          {errors.email && touched.email ? (
-            <div className="mt-2 text-red-600">{errors.email}</div>
-          ) : null}
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-customTxtContent mb-2 text-sm"
+              >
+                Password
+              </label>
+              <Field
+                className="w-full bg-customBg border border-customSecondary text-customTxtContent rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-customSecondary focus:border-transparent transition-all"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                type="password"
+              />
+              {errors.password && touched.password ? (
+                <div className="mt-2 text-red-600 text-sm">
+                  {errors.password}
+                </div>
+              ) : null}
+            </div>
 
-          <label htmlFor="password" className="my-2">
-            Password
-          </label>
-          <Field
-            className="border border-black px-2 py-1 rounded"
-            id="password"
-            name="password"
-            placeholder="Enter Password"
-            type="password"
-          />
+            {/* Sign Up Results */}
+            <div className="mt-4">{renderResults(res)}</div>
 
-          {errors.password && touched.password ? (
-            <div className="mt-2 text-red-600">{errors.password}</div>
-          ) : null}
-
-          {/* Sign Up Results */}
-          <div className="mt-3">{renderResults(res)}</div>
-
-          {/* Submit Button */}
-          <Button width={200} text="Submit" />
+            {/* Submit Button */}
+            <div className="flex justify-center mt-8">
+              <Button width={200} text="Enter the Realm" />
+            </div>
+          </div>
         </Form>
       )}
     </Formik>

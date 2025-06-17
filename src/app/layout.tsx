@@ -10,6 +10,8 @@ const fontFamily = Lancelot({
   weight: ['400'],
   style: 'normal',
   subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-lancelot',
 });
 
 export const metadata: Metadata = {
@@ -23,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={fontFamily.className}>
+    <html lang="en" className={fontFamily.variable}>
+      <body className={`${fontFamily.className} antialiased`}>
         {/* Core Application Wrapper  */}
         <div
           id="app"

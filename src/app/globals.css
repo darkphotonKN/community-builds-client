@@ -1,8 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
-
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 /* Light Gray: #F5F5F5 — A very faint, soft gray that mimics the subtle look of aged paper. */
 /* Light Yellow: #FFF9DB  - Like old paper yellow. */

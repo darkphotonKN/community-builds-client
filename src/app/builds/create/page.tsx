@@ -88,7 +88,7 @@ function CreateBuildsPage() {
         return (
           <>
             <HeaderOne>Step I - Choose a build name.</HeaderOne>
-            <div className="mt-5">
+            <div className="mt-5 bg-customContentBg/50 p-6 rounded-lg">
               <div className="flex h-[400px] justify-center items-center">
                 <PrimaryInput
                   placeHolder="Name Your Build"
@@ -121,7 +121,7 @@ function CreateBuildsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
               {/* Description Section */}
-              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
+              <div className="bg-customContentBg/50 p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
                 <HeaderTwo>Description</HeaderTwo>
                 <div className="mt-4 text-customTxtContent text-center">
                   Describe what your build does in a short sentence.
@@ -137,7 +137,7 @@ function CreateBuildsPage() {
               </div>
 
               {/* Main Skill Section */}
-              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
+              <div className="bg-customContentBg/50 p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
                 <HeaderTwo>Main Skill</HeaderTwo>
                 <div className="mt-4 text-customTxtContent text-center">
                   What&apos;s the{' '}
@@ -155,7 +155,7 @@ function CreateBuildsPage() {
               </div>
 
               {/* Class Section */}
-              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
+              <div className="bg-customContentBg/50 p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
                 <HeaderTwo>Class</HeaderTwo>
                 <div className="mt-4 text-customTxtContent text-center">
                   Which <span className="text-customSecondary">Class</span> is
@@ -179,7 +179,7 @@ function CreateBuildsPage() {
               </div>
 
               {/* Ascendancy Section */}
-              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
+              <div className="bg-customContentBg/50 p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all">
                 <HeaderTwo>Ascendancy</HeaderTwo>
                 <div className="mt-4 text-customTxtContent text-center">
                   Which{' '}
@@ -204,7 +204,7 @@ function CreateBuildsPage() {
               </div>
 
               {/* Tags Section */}
-              <div className="bg-customContentBg p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all md:col-span-2">
+              <div className="bg-customContentBg/50 p-6 rounded-lg shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all md:col-span-2">
                 <HeaderTwo>Tags</HeaderTwo>
                 <div className="mt-4 text-customTxtContent text-center">
                   Which <span className="text-customSecondary">Tags</span>{' '}
@@ -247,40 +247,42 @@ function CreateBuildsPage() {
         return (
           <>
             <HeaderOne>Step III - Create Build</HeaderOne>
-            <div className="mt-6">
-              Describe what your amazing build does in a short sentence.
-            </div>
-            <Button onClick={() => {}} width={200} text="Create Item" />
-            <div className="flex mt-[20px] gap-[20px] flex-wrap">
-              <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
-                Helmet
+            <div className="mt-6 bg-customContentBg/50 p-6 rounded-lg">
+              <div className="text-customTxtContent">
+                Describe what your amazing build does in a short sentence.
               </div>
-              <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
-                BodyArmour
-              </div>
-              <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
-                Weapon
-              </div>
-              <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
-                Shield
-              </div>
-              <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
-                Gloves
-              </div>
-              <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
-                Belt
-              </div>
-              <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
-                Boots
-              </div>
-              <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
-                Amulet
-              </div>
-              <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
-                Ring
-              </div>
-              <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
-                Ring
+              <Button onClick={() => {}} width={200} text="Create Item" />
+              <div className="flex mt-[20px] gap-[20px] flex-wrap">
+                <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
+                  Helmet
+                </div>
+                <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
+                  BodyArmour
+                </div>
+                <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
+                  Weapon
+                </div>
+                <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
+                  Shield
+                </div>
+                <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
+                  Gloves
+                </div>
+                <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
+                  Belt
+                </div>
+                <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
+                  Boots
+                </div>
+                <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
+                  Amulet
+                </div>
+                <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
+                  Ring
+                </div>
+                <div className="flex items-center justify-center border cursor-pointer border-customSecondary rounded-lg w-[200px] h-[200px]">
+                  Ring
+                </div>
               </div>
             </div>
           </>
@@ -290,12 +292,14 @@ function CreateBuildsPage() {
         return (
           <>
             <HeaderOne>Step IV - Create Build Or Create Item</HeaderOne>
-            <div className="mt-6">
-              Describe what your amazing build does in a short sentence.
-            </div>
-            <div className="flex mt-[20px] gap-[20px]">
-              <div className="flex-1 text-center cursor-pointer border border-customSecondary rounded-lg p-[40px] hover:bg-customSecondary">
-                Create Build
+            <div className="mt-6 bg-customContentBg/50 p-6 rounded-lg">
+              <div className="text-customTxtContent">
+                Describe what your amazing build does in a short sentence.
+              </div>
+              <div className="flex mt-[20px] gap-[20px]">
+                <div className="flex-1 text-center cursor-pointer border border-customSecondary rounded-lg p-[40px] hover:bg-customSecondary">
+                  Create Build
+                </div>
               </div>
             </div>
           </>
@@ -311,8 +315,10 @@ function CreateBuildsPage() {
         builds!
       </div>
       <div className="flex justify-center">
-        <div className="flex flex-col items-center">
-          <div>{renderStep()}</div>
+        <div className="flex flex-col items-center w-full max-w-4xl">
+          <div className="w-full bg-customContentBg/30 backdrop-blur-sm p-8 rounded-lg shadow-customBlockShadow">
+            {renderStep()}
+          </div>
         </div>
       </div>
     </div>

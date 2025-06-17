@@ -36,7 +36,7 @@ export const cornerNavData: NavData = [
   },
   {
     name: 'Register',
-    link: '/',
+    link: '/signup',
     type: NavType.notAuthenticated,
   },
   {
