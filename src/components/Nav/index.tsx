@@ -6,6 +6,7 @@ import MainTitle from '@/components/MainTitle';
 import { NavType } from '@/constants/enums';
 import Button from '../Button';
 import useIsAuthenticated from '@/hooks/useIsAuthenticated';
+import NotificationBell from '@/components/NotificationBell';
 
 function Nav() {
   const pathname = usePathname();
@@ -58,6 +59,9 @@ function Nav() {
 
           {/* Right side - Auth and Create Build */}
           <div className="flex items-center gap-4">
+            {/* Notification Bell - Only show if authenticated */}
+            {isAuthenticated && <NotificationBell />}
+
             {navItemFiltered.map((navItem) => (
               <li key={navItem.name} className="relative">
                 {navItem?.link ? (
