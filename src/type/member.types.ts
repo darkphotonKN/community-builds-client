@@ -10,8 +10,8 @@ export type MemberInfo = {
 
 export type SignInResponse = {
 	accessExpiresIn: number;
-	accessToken: string;
-	memberInfo: MemberInfo;
-	refreshExpiresIn: number;
-	refreshToken: string;
+	access_token: string;
+	member_info: MemberInfo;
+	refresh_expires_in: number;
+	refresh_token: string;
 };

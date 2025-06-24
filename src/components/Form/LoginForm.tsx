@@ -1,13 +1,13 @@
-'use client';
-import { isErrorResponse, postRequest } from '@/lib/api/requestHelpers';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { useEffect, useState } from 'react';
-import * as Yup from 'yup';
-import Button from '../Button';
-import { ApiResponse, ErrorResponse } from '@/type/api';
-import { SignInResponse } from '@/type/member.types';
-import HeaderTwo from '../Layout/Text/HeaderTwo';
-import { useRouter } from 'next/navigation';
+"use client";
+import { isErrorResponse, postRequest } from "@/lib/api/requestHelpers";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { useEffect, useState } from "react";
+import * as Yup from "yup";
+import Button from "../Button";
+import { ApiResponse, ErrorResponse } from "@/type/api";
+import { SignInResponse } from "@/type/member.types";
+import HeaderTwo from "../Layout/Text/HeaderTwo";
+import { useRouter } from "next/navigation";
 
 type Values = {
   password: string;
@@ -20,23 +20,25 @@ function LoginForm() {
 
   const SignupSchema = Yup.object().shape({
     email: Yup.string()
-      .email('Invalid email')
-      .required('The email field is required.'),
+      .email("Invalid email")
+      .required("The email field is required."),
     password: Yup.string()
-      .min(6, 'Password needs to be longer.')
-      .required('The password field is required.'),
+      .min(6, "Password needs to be longer.")
+      .required("The password field is required."),
   });
 
   useEffect(() => {
     if (res?.statusCode === 200) {
+      console.log("res:", res);
+
       // store access token then re-direct
       if (isErrorResponse(res)) return;
-      localStorage.setItem('access', res.result.accessToken);
+      localStorage.setItem("access", res.result.access_token);
     }
   }, [res]);
 
   const renderResults = (
-    res: ApiResponse<SignInResponse> | null | undefined
+    res: ApiResponse<SignInResponse> | null | undefined,
   ) => {
     /* handle error case first for narrowing */
     if (isErrorResponse(res)) {
@@ -61,27 +63,27 @@ function LoginForm() {
   return (
     <Formik
       initialValues={{
-        email: '',
-        password: '',
+        email: "",
+        password: "",
       }}
       validationSchema={SignupSchema}
       onSubmit={async (
         values: Values,
-        { setSubmitting }: FormikHelpers<Values>
+        { setSubmitting }: FormikHelpers<Values>,
       ) => {
-        const res = await postRequest<SignInResponse>('/member/signin', values);
+        const res = await postRequest<SignInResponse>("/member/signin", values);
 
-        console.log('signin res:', res);
+        console.log("signin res:", res);
 
         if (isErrorResponse(res)) {
-          console.log('Error', res.message);
+          console.log("Error", res.message);
           setRes(res);
 
           return;
         }
 
         setRes(res);
-        router.push('/');
+        router.push("/");
       }}
     >
       {({ errors, touched }) => (
