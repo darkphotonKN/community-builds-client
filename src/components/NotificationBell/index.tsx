@@ -74,21 +74,21 @@ const NotificationBell = () => {
     }
   };
 
+  console.log('notifications:', notifications);
+
   return (
     <div className="relative" ref={popupRef}>
       {/* Notification Bell Icon */}
       <button
         onClick={handleBellClick}
-        className="relative p-2 rounded-full bg-customContentBg border border-customSecondary 
-                 hover:bg-customSecondary hover:text-customBg transition-all duration-200
-                 shadow-customBlockShadow hover:shadow-customBlockShadowHover
+        className="relative p-2 text-customHeaderTwo hover:text-customSecondary transition-all duration-200
                  group"
         aria-label="Notifications"
       >
-        {/* Fantasy Bell Icon */}
+        {/* Simple Bell Icon */}
         <div className="relative">
           <svg
-            className="w-6 h-6 text-customHeaderTwo group-hover:text-customBg transition-colors duration-200"
+            className="w-6 h-6 transition-colors duration-200"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -105,12 +105,6 @@ const NotificationBell = () => {
               strokeLinejoin="round"
               strokeWidth={2}
               d="M9 17h6m-6 0v-5a3 3 0 013-3h0a3 3 0 013 3v5m-6 0h6"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 2v2m0 0v2m0-2h2m-2 0H8"
             />
           </svg>
 
