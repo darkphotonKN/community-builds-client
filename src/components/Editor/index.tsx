@@ -12,13 +12,13 @@ import {
   Node,
   RawCommands,
 } from '@tiptap/core';
-import { Plugin, PluginKey } from 'prosemirror-state';
+import { Plugin, PluginKey, TextSelection } from 'prosemirror-state';
 import { DOMParser } from '@tiptap/pm/model';
 import EditorImage from '@tiptap/extension-image';
 import { getRequest } from '@/lib/api/requestHelpers';
 import Image from 'next/image';
 
-const MenuBar = () => {
+const MenuBar = ({ allData }: { allData: any }) => {
   const { editor } = useCurrentEditor();
   // console.log('editor', editor?.getHTML());
   // if (!editor) {
@@ -84,7 +84,6 @@ const MenuBar = () => {
   }
 
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
-  const [allData, setAllData] = useState([]);
   const handleOpenDataPanel = () => {
     setIsPanelOpen(true);
   };
@@ -102,18 +101,6 @@ const MenuBar = () => {
       setIsPanelOpen(false);
     }
   };
-
-  useEffect(() => {
-    const getAllData = async () => {
-      const res = await getRequest<any>(`/item/all-data`, null, { auth: true });
-      if (res?.statusCode === 200) {
-        console.log('all data', res.result);
-        setAllData(res.result);
-      }
-    };
-
-    getAllData();
-  }, []);
 
   if (!editor) {
     return null;
@@ -298,7 +285,7 @@ const MenuBar = () => {
             }`}
           >
             <div className="">
-              {allData.map((item: any) => (
+              {allData.slice(0, 20).map((item: any) => (
                 <div
                   key={item.id}
                   onClick={() => handleSelectData(item.id)}
@@ -372,6 +359,49 @@ const HoverExtension = Extension.create({
   },
 });
 
+const PreventCursorInsideGroupExtension = Extension.create({
+  name: 'preventCursorInsideGroup',
+
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey('preventCursorInsideGroup'),
+        props: {
+          handleClick: (view, pos) => {
+            console.log('click view', view);
+            console.log('click pos', pos);
+            const { doc, tr } = view.state;
+            console.log('click doc', doc);
+            console.log('click tr', tr);
+            const $pos = doc.resolve(pos);
+            console.log('click $pos', $pos);
+
+            // 檢查點擊位置是否在 span 節點內部
+            const node = $pos.parent;
+            console.log('click parent node', node);
+            const index = $pos.index();
+            console.log('click tag name', node.maybeChild(index)?.type.name);
+            if (node.maybeChild(index)?.type.name === 'image') {
+              // 如果是在 span 節點內，將光標移動到節點外部
+              const nodePos = $pos.before(3);
+              console.log('nodePos', nodePos);
+              const $nodePos = doc.resolve(nodePos);
+              const transaction = tr.setSelection(
+                TextSelection.create(doc, $nodePos.pos)
+              );
+
+              view.dispatch(transaction);
+              return true; // 阻止默認處理
+            }
+
+            return false; // 允許默認處理
+          },
+        },
+      }),
+    ];
+  },
+});
+
 const ImageTextSpan = Node.create({
   name: 'span',
   group: 'inline',
@@ -380,7 +410,7 @@ const ImageTextSpan = Node.create({
   content: 'inline*',
   selectable: true,
   draggable: false,
-
+  isolating: true,
   addAttributes() {
     return {
       class: {
@@ -436,10 +466,75 @@ const ImageTextSpan = Node.create({
   },
 });
 
+const KeyboardMovementExtension = Extension.create({
+  name: 'keyboardMovement',
+
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey('keyboardMovement'),
+        props: {
+          handleKeyDown(view, event) {
+            // 監聽左右箭頭鍵
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+              const { state } = view;
+              const { selection } = state;
+
+              console.log('當前光標位置:', selection.from);
+              console.log('按下了:', event.key);
+
+              const { from } = selection;
+
+              // 解析當前位置
+              const $pos = state.doc.resolve(from);
+
+              // 獲取當前節點
+              const currentNode = $pos.node();
+              console.log('當前節點類型:', currentNode.type.name);
+              // 這裡可以加入你的自定義邏輯
+              // 例如，檢查下一個位置是否在你的群組內
+              // 構建路徑
+              const path = [];
+              for (let i = $pos.depth; i >= 0; i--) {
+                path.push($pos.node(i).type.name);
+              }
+              console.log('path', path);
+              // 檢查是否在 span 標籤內
+              const isInSpan = path.includes('span');
+              console.log('isInSpan', isInSpan);
+              // 如果返回 true，ProseMirror 不會處理這個按鍵事件
+              // 如果返回 false，ProseMirror 會繼續正常處理這個事件
+              return false;
+            }
+
+            return false;
+          },
+        },
+      }),
+    ];
+  },
+});
+
+const CustomParagraph = Node.create({
+  name: 'paragraph',
+
+  group: 'block',
+
+  content: 'inline*',
+
+  parseHTML() {
+    return [{ tag: 'p' }];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ['p', mergeAttributes(HTMLAttributes), ['span', 0]];
+  },
+});
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
   // TextStyle.configure({ types: [ListItem.name] }),
   TextStyle.configure(),
+  CustomParagraph.configure(),
   EditorImage.configure({
     inline: true,
     allowBase64: true,
@@ -533,19 +628,23 @@ const extensions = [
   }),
   // Span.configure(),
   ImageTextSpan.configure(),
+  PreventCursorInsideGroupExtension.configure(),
   // CustomNodeExtension.configure(),
+  KeyboardMovementExtension.configure(),
 ];
 
 const content = ``;
 
 const CustomEditor = ({
   handleChangeEditor,
+  allData,
 }: {
   handleChangeEditor: (content: string) => void;
+  allData: any[];
 }) => {
   return (
     <EditorProvider
-      slotBefore={<MenuBar />}
+      slotBefore={<MenuBar allData={allData} />}
       extensions={extensions}
       content={content}
       editorProps={{

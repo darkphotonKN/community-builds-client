@@ -30,7 +30,7 @@ function CreateBuildsPage() {
     setTagSelection,
     initializeBuildData,
   } = useBuildStore();
-
+  console.log('tags', tags);
   // fetch and intialize data required for generating the build creation process
   useEffect(() => {
     initializeBuildData();

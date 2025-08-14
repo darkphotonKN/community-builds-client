@@ -68,9 +68,9 @@ export const useBuildStore = create<BuildState>((set, get) => ({
 
     state.setBaseClass(classes[0]); // note this function also automatically sets ascendancies to the first choice of that class
 
-    const tagData = await getRequest<TagApiData[]>("/tag");
+    const tagData = await getRequest<{tags:TagApiData[]}>("/tag");
 
-    state.setTags(tagData?.result ?? []);
+    state.setTags(tagData?.result.tags ?? []);
   },
 
   setStep: (step) => set({ step }),

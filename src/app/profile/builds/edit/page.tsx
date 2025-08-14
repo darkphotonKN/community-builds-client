@@ -81,13 +81,19 @@ function BuildEdit() {
     const res = await getRequest<any>(`/item?slot=${slot}`, null, {
       auth: true,
     });
-    if (res?.statusCode === 200) {
+    console.log('get items', res);
+    if (
+      res?.statusCode === 200 &&
+      res.result &&
+      res.result.items &&
+      res.result.items.length > 0
+    ) {
       console.log('res.result', res.result);
-      const options = res.result.map((item: any) => ({
+      const options = res.result.items.map((item: any) => ({
         key: item.id,
         value: item.name,
       }));
-      setItems(res.result);
+      setItems(res.result.items);
       setItemOptions(options);
     }
   };
@@ -111,18 +117,22 @@ function BuildEdit() {
     console.log('handleCreateBuildSet buildItems', buildItems);
     try {
       const res = await patchRequest<any>(
-        '/build/96a39db4-2dc6-4291-8f11-8a81f66c4fca/update-set',
+        '/build/update-set',
         {
-          weapon: buildItems.weapon.id,
-          shield: buildItems.offHand.id,
-          helmet: buildItems.helmet.id,
-          bodyArmour: buildItems.bodyArmour.id,
-          gloves: buildItems.gloves.id,
-          belt: buildItems.belt.id,
-          boots: buildItems.boots.id,
-          amulet: buildItems.amulet.id,
-          leftRing: buildItems.leftRing.id,
-          rightRing: buildItems.rightRing.id,
+          id: '96a39db4-2dc6-4291-8f11-8a81f66c4fca',
+          buildSet: {
+            weapon: buildItems.weapon.id,
+            shield: buildItems.offHand.id,
+            helmet: buildItems.helmet.id,
+            bodyArmour: buildItems.bodyArmour.id,
+            gloves: buildItems.gloves.id,
+            belt: buildItems.belt.id,
+            boots: buildItems.boots.id,
+            amulet: buildItems.amulet.id,
+            leftRing: buildItems.leftRing.id,
+            rightRing: buildItems.rightRing.id,
+          },
+          content: editorContent,
         },
 
         true
@@ -142,6 +152,7 @@ function BuildEdit() {
 
   const handleRareItem = (event: any) => {
     // event.target.value
+    console.log('baseItems', baseItems);
     const targetItem: any = baseItems.find(
       (item: any) => item.id === event.target.value
     );
@@ -223,8 +234,12 @@ function BuildEdit() {
     const res = await getRequest<any>(`/item/member-rare-item`, null, {
       auth: true,
     });
-    if (res?.statusCode === 200) {
-      setMemberRareItems(res.result);
+    if (
+      res?.statusCode === 200 &&
+      res.result.items &&
+      res.result.items.length > 0
+    ) {
+      setMemberRareItems(res.result.items);
     }
   };
 
@@ -233,12 +248,16 @@ function BuildEdit() {
       const res = await getRequest<any>(`/item/base-items`, null, {
         auth: true,
       });
-      if (res?.statusCode === 200) {
-        const options = res.result.map((item: any) => ({
+      if (
+        res?.statusCode === 200 &&
+        res.result.baseItems &&
+        res.result.baseItems.length > 0
+      ) {
+        const options = res.result.baseItems.map((item: any) => ({
           key: item.id,
           value: item.name,
         }));
-        setBaseItems(res.result);
+        setBaseItems(res.result.baseItems);
         setBaseItemOptions(options);
       }
     };
@@ -247,12 +266,16 @@ function BuildEdit() {
       const res = await getRequest<any>(`/item/item-mods`, null, {
         auth: true,
       });
-      if (res?.statusCode === 200) {
-        const options = res.result.map((item: any) => ({
+      if (
+        res?.statusCode === 200 &&
+        res.result.itemMods &&
+        res.result.itemMods.length > 0
+      ) {
+        const options = res.result.itemMods.map((item: any) => ({
           key: item.id,
           value: item.stat,
         }));
-        setItemMods(res.result);
+        setItemMods(res.result.itemMods);
         setItemModOptions(options);
       }
     };
@@ -291,6 +314,19 @@ function BuildEdit() {
     };
 
     getArticle();
+  }, []);
+
+  const [allData, setAllData] = useState([]);
+  useEffect(() => {
+    const getAllData = async () => {
+      const res = await getRequest<any>(`/item/all-data`, null, { auth: true });
+      if (res?.statusCode === 200) {
+        console.log('all data', res.result);
+        setAllData(res.result);
+      }
+    };
+
+    getAllData();
   }, []);
 
   const handleChangeEditor = (value: string) => {
@@ -708,7 +744,7 @@ function BuildEdit() {
       <div>
         <div>Editor</div>
         {/* <Tiptap /> */}
-        <Editor handleChangeEditor={handleChangeEditor} />
+        <Editor handleChangeEditor={handleChangeEditor} allData={allData} />
       </div>
       <div className="flex justify-center gap-4">
         <Button onClick={handleClearBuildSet} width={200} text="Clear" />
