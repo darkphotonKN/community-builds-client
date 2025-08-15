@@ -285,7 +285,7 @@ const MenuBar = ({ allData }: { allData: any }) => {
             }`}
           >
             <div className="">
-              {allData.slice(0, 20).map((item: any) => (
+              {allData?.slice(0, 20).map((item: any) => (
                 <div
                   key={item.id}
                   onClick={() => handleSelectData(item.id)}
@@ -640,7 +640,7 @@ const CustomEditor = ({
   allData,
 }: {
   handleChangeEditor: (content: string) => void;
-  allData: any[];
+  allData?: any[];
 }) => {
   return (
     <EditorProvider

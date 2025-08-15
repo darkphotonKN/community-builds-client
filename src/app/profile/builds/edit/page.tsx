@@ -316,13 +316,22 @@ function BuildEdit() {
     getArticle();
   }, []);
 
-  const [allData, setAllData] = useState([]);
+  const [allData, setAllData] = useState<any[]>();
   useEffect(() => {
     const getAllData = async () => {
-      const res = await getRequest<any>(`/item/all-data`, null, { auth: true });
-      if (res?.statusCode === 200) {
-        console.log('all data', res.result);
-        setAllData(res.result);
+      const res = await getRequest<any>(`/composite/game-data`, null, {
+        auth: true,
+      });
+      if (res?.statusCode === 200 && res.result) {
+        let data: any[] = [];
+        Object.keys(res.result).map((key: any) => {
+          if (res.result[key] && res.result[key].length > 0) {
+            data = [...data, ...res.result[key]];
+          }
+        });
+
+        console.log('data', data);
+        setAllData(data);
       }
     };
 
