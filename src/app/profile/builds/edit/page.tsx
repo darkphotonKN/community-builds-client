@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Editor from '@/components/Editor';
-
+import { useRouter, useSearchParams } from 'next/navigation';
 const Tiptap = () => {
   const editor = useEditor({
     extensions: [StarterKit],
@@ -77,6 +77,9 @@ function BuildEdit() {
     handleGetItems(slot);
   };
 
+  const searchParams = useSearchParams();
+  const buildId = searchParams.get('id') ?? '';
+
   const handleGetItems = async (slot: string) => {
     const res = await getRequest<any>(`/item?slot=${slot}`, null, {
       auth: true,
@@ -113,13 +116,14 @@ function BuildEdit() {
     });
   };
 
-  const handleCreateBuildSet = async () => {
-    console.log('handleCreateBuildSet buildItems', buildItems);
+  const handleUpdateBuild = async () => {
+    console.log('handleUpdateBuild buildItems', buildItems);
+    console.log('handleUpdateBuild buildId', buildId);
     try {
       const res = await patchRequest<any>(
-        '/build/update-set',
+        `/build/${buildId}/update-set`,
         {
-          id: '96a39db4-2dc6-4291-8f11-8a81f66c4fca',
+          // id: '96a39db4-2dc6-4291-8f11-8a81f66c4fca',
           buildSet: {
             weapon: buildItems.weapon.id,
             shield: buildItems.offHand.id,
@@ -757,11 +761,7 @@ function BuildEdit() {
       </div>
       <div className="flex justify-center gap-4">
         <Button onClick={handleClearBuildSet} width={200} text="Clear" />
-        <Button
-          onClick={handleCreateBuildSet}
-          width={200}
-          text="Create item Set"
-        />
+        <Button onClick={handleUpdateBuild} width={200} text="Update Build" />
         <Button onClick={createArticle} width={200} text="Create Content" />
       </div>
     </div>

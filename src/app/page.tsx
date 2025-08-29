@@ -4,6 +4,8 @@ import HeaderOne from '@/components/Layout/Text/HeaderOne';
 import HeaderTwo from '@/components/Layout/Text/HeaderTwo';
 import HeaderThree from '@/components/Layout/Text/HeaderThree';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { getRequest } from '@/lib/api/requestHelpers';
 
 // Mock data for featured builds
 const featuredBuilds = [
@@ -72,6 +74,27 @@ const trendingBuilds = [
 ];
 
 const Home = () => {
+  const [communityBuilds, setCommunityBuilds] = useState([]);
+  useEffect(() => {
+    const handleGetCommunityBuilds = async () => {
+      try {
+        const res = await getRequest<any>(
+          `/build/community?page_no=1&page_size=10`,
+          null
+        );
+        console.log('res', res);
+
+        if (res?.statusCode === 200 && res.result && res.result.builds) {
+          console.log('res.result.builds', res.result.builds);
+          setCommunityBuilds(res.result.builds);
+        }
+      } catch (error) {
+        console.log('err', error);
+      }
+    };
+    handleGetCommunityBuilds();
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto">
       {/* Hero Section */}
@@ -84,6 +107,51 @@ const Home = () => {
           This is the best place to share your beloved Path of Exile 2 creation.
           Join our community of builders and discover amazing builds from fellow
           exiles.
+        </div>
+      </div>
+
+      {/* Community Builds Section */}
+      <div>
+        <div className="flex justify-between items-center mb-8">
+          <HeaderTwo>Community Builds</HeaderTwo>
+          <Link
+            href="/builds/community"
+            className="text-customSecondary hover:text-customTxtContent transition-colors"
+          >
+            View All →
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {communityBuilds &&
+            communityBuilds.map((build: any) => (
+              <div
+                key={build.id}
+                className="bg-customContentBg rounded-lg p-6 shadow-customBlockShadow hover:shadow-customBlockShadowHover transition-all"
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <HeaderThree>{build.title || ''}</HeaderThree>
+                  <div className="text-customSecondary">
+                    ★ {build.avgRating || 0}
+                  </div>
+                </div>
+                <div className="text-customHeaderTwo mb-2">
+                  by {build.author || ''}
+                </div>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {build.tags.map((tag: any, index: any) => (
+                    <span
+                      key={tag.id}
+                      className="px-2 py-1 bg-customBg rounded text-sm text-customSecondary"
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+                <div className="text-customHeaderTwo text-sm">
+                  👁️ {build.views || 0} views
+                </div>
+              </div>
+            ))}
         </div>
       </div>
 

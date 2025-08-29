@@ -68,7 +68,9 @@ function CreateBuildsPage() {
       return;
     }
 
-    router.push('/profile/builds/edit');
+    if (res?.result?.id) {
+      router.push(`/profile/builds/edit?id=${res.result.id}`);
+    }
   };
 
   const ascendancyChoices = baseClassSelection
