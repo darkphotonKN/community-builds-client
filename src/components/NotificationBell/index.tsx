@@ -173,7 +173,7 @@ const NotificationBell = () => {
                           </h4>
                           <span className="text-xs text-customTxtContent/60 flex-shrink-0 ml-2">
                             {formatNotificationTime(
-                              notification.created_at.seconds
+                              notification.createdAt.seconds
                             )}
                           </span>
                         </div>

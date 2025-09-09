@@ -4,7 +4,7 @@ export interface Notification {
   type: string;
   title: string;
   message: string;
-  created_at: {
+  createdAt: {
     seconds: number;
     nanos: number;
   };
